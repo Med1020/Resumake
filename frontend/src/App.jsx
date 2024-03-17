@@ -1,6 +1,5 @@
 import { Routes, Route } from "react-router-dom";
 import CreateResume from "./Pages/CreateResume";
-import { useEffect } from "react";
 
 function App() {
   return (
