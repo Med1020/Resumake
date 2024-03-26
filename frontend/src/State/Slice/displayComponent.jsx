@@ -5,7 +5,7 @@ const displayComponent = createSlice({
   initialState: {
     education: {
       education: false,
-      isExpanded: false,
+      isExpanded: true,
     },
     project: {
       project: false,

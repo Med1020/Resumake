@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { IoIosArrowUp } from "react-icons/io";
 import { IoIosArrowDown } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
@@ -7,7 +7,20 @@ import CancelSave from "../CancelSaveBtns";
 
 const Education = () => {
   const { isExpanded } = useSelector((state) => state.showComponent.education);
+  const educationList = useSelector(
+    (state) => state.resumeContent.educationList
+  );
   const dispatch = useDispatch();
+
+  const [education, setEductaion] = useState({
+    school: "",
+    degree: "",
+    city: "",
+    country: "",
+    startDate: "",
+    endDate: "",
+    description: "",
+  });
   return (
     <div>
       <div
@@ -32,6 +45,9 @@ const Education = () => {
                 id="school"
                 placeholder="Enter school/university"
                 className="block border rounded-md border-gray-300 w-full p-2 mb-4 bg-gray-100"
+                onChange={(e) =>
+                  setEductaion({ ...education, school: e.target.value })
+                }
               />
             </div>
             <div className="p-1">
@@ -42,6 +58,9 @@ const Education = () => {
                 id="degree"
                 placeholder="Enter Degree"
                 className="block border rounded-md border-gray-300 w-full p-2 mb-4 bg-gray-100"
+                onChange={(e) =>
+                  setEductaion({ ...education, degree: e.target.value })
+                }
               />
             </div>
             <div className="flex justify-between p-1">
@@ -53,6 +72,9 @@ const Education = () => {
                   id="city"
                   placeholder="Enter City"
                   className="block border rounded-md border-gray-300 w-full p-2 mb-4 bg-gray-100"
+                  onChange={(e) =>
+                    setEductaion({ ...education, city: e.target.value })
+                  }
                 />
               </div>
               <div className="w-full">
@@ -63,6 +85,9 @@ const Education = () => {
                   id="degree"
                   placeholder="Enter Country"
                   className="block border rounded-md border-gray-300 w-full p-2 mb-4 bg-gray-100"
+                  onChange={(e) =>
+                    setEductaion({ ...education, country: e.target.value })
+                  }
                 />
               </div>
             </div>
@@ -74,6 +99,9 @@ const Education = () => {
                 <input
                   id="startDate"
                   className="block border rounded-md border-gray-300 w-full p-2 mb-4 bg-gray-100"
+                  onChange={(e) =>
+                    setEductaion({ ...education, startDate: e.target.value })
+                  }
                 />
               </div>
               <div className="w-full ">
@@ -83,13 +111,16 @@ const Education = () => {
                 <input
                   id="endDate"
                   className="block border rounded-md border-gray-300 w-full p-2 mb-4 bg-gray-100"
+                  onChange={(e) =>
+                    setEductaion({ ...education, endDate: e.target.value })
+                  }
                 />
               </div>
             </div>
-            <div className="p-1 flex">
+            {/* <div className="p-1 flex">
               <input type="checkbox" className="mr-2" />
               <label>Present</label>
-            </div>
+            </div> */}
             <div className="p-1">
               <label htmlFor="description" className="font-semibold">
                 Description
@@ -97,6 +128,9 @@ const Education = () => {
               <textarea
                 id="description"
                 className="block border rounded-md border-gray-300 w-full p-2 mb-4 bg-gray-100"
+                onChange={(e) =>
+                  setEductaion({ ...education, description: e.target.value })
+                }
               />
             </div>
           </div>

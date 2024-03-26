@@ -1,21 +1,32 @@
 import React, { useState } from "react";
+import { loginAPI } from "../Services/apiServices";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [credentials, setCredentials] = useState({ email: "", password: "" });
+  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
-    e.preventdefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     try {
-      const response = fetch();
-    } catch (e) {
-      console.log(e);
+      const response = await loginAPI({
+        email: credentials.email,
+        password: credentials.password,
+      });
+      if (response.token) {
+        navigate("/");
+      } else {
+        console.log("Server error");
+      }
+    } catch (error) {
+      console.error("Error logging in:", error);
     }
   };
   return (
     <div className="w-1/4 m-auto">
       <div className="w-full">
         <header className="text-xl font-bold pb-5">Login</header>
-        <form>
+        <form onSubmit={handleSubmit}>
           <div className="mb-2 ">
             <label>Email</label>
             <input
@@ -38,7 +49,10 @@ const Login = () => {
               }
             />
           </div>
-          <button className="bg-sky-500 px-3 py-2 rounded-md my-2 text-white w-full">
+          <button
+            type="submit"
+            className="bg-sky-500 px-3 py-2 rounded-md my-2 text-white w-full"
+          >
             Login
           </button>
         </form>

@@ -4,6 +4,12 @@ import { toggleExpandComponent } from "../State/Slice/displayComponent";
 
 const CancelSave = ({ component }) => {
   const dispatch = useDispatch();
+  const handleSave = () => {
+    console.log(component);
+    //check if that existing object is being edited or new object is created
+    //if existing object dispatch to update<componentname> else to create<componentname>
+    dispatch(toggleExpandComponent(component));
+  };
 
   return (
     <div className="bg-white mt-3 p-3 rounded-lg sticky relative bottom-0 shadow-lg ">
@@ -15,7 +21,7 @@ const CancelSave = ({ component }) => {
       </button>
       <button
         className="ml-3 p-2 w-24 border rounded-md bg-pink-500 text-white font-bold rounded-lg"
-        onClick={() => dispatch()}
+        // onClick={handleSave}
       >
         Save
       </button>
