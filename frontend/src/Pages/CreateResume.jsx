@@ -35,36 +35,13 @@ const CreateResume = () => {
       <div className="w-1/2 mx-10">
         <ResumeName />
         <UserDetails />
-        <DragDropContext onDragEnd={onDragEnd}>
-          {education && (
-            <Droppable droppableId="edu">
-              {(provided) => {
-                <Education
-                  innerRef={provided.innerRef}
-                  {...provided.droppableProps}
-                >
-                  {provided.placeholder}
-                </Education>;
-              }}
-            </Droppable>
-          )}
-          {experience && (
-            <Droppable droppableId="exp">
-              {(provided) => {
-                <Experience
-                  innerRef={provided.innerRef}
-                  {...provided.droppableProps}
-                >
-                  {provided.placeholder}
-                </Experience>;
-              }}
-            </Droppable>
-          )}
-          {project && <Project />}
-          {skill && <Skill />}
-          {course && <Course />}
-          {award && <Award />}
-        </DragDropContext>
+        {education && <Education />}
+        {experience && <Experience />}
+        {project && <Project />}
+        {skill && <Skill />}
+        {course && <Course />}
+        {award && <Award />}
+
         {!componentInEditMode && (
           <button
             className="my-2 p-2 border rounded-md bg-pink-500 text-white rounded-lg"
