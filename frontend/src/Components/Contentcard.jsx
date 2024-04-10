@@ -1,11 +1,23 @@
 import React from "react";
-import { useDispatch } from "react-redux";
-import { toggleShowComponent } from "../State/Slice/displayComponent";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  setNewContent,
+  setComponentInEditMode,
+  toggleShowComponent,
+  setcomponentIsExpanded,
+} from "../State/Slice/displayComponent";
 
 const Contentcard = ({ content, handleCloseModal }) => {
   const dispatch = useDispatch();
+  const state = useSelector((state) => state.showComponent);
   const handleCreateContent = () => {
-    dispatch(toggleShowComponent(content.toLowerCase()));
+    const lowerCaseContent = content.toLowerCase();
+    if (!state[lowerCaseContent][lowerCaseContent]) {
+      dispatch(setComponentInEditMode(lowerCaseContent));
+      dispatch(setNewContent(lowerCaseContent));
+    }
+    dispatch(toggleShowComponent({ section: lowerCaseContent, toShow: true }));
+    dispatch(setcomponentIsExpanded(lowerCaseContent));
     handleCloseModal();
   };
   return (

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { updateUserDetails } from "../State/Slice/userInfo";
+import { cancelUpdate, updateUserDetails } from "../State/Slice/userInfo";
 import { MdOutlineEmail } from "react-icons/md";
 import { FaPhoneAlt } from "react-icons/fa";
 import { IoLocationOutline } from "react-icons/io5";
@@ -11,22 +11,35 @@ const UserDetails = () => {
     (state) => state.userDetails
   );
 
+  const [editedDetails, setEditedDetails] = useState({
+    fullName,
+    email,
+    jobTitle,
+    phone,
+    address,
+  });
+  const [previousDetails, setPreviousDetails] = useState(null);
+  const [editMode, setEditMode] = useState(false);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
-    dispatch(updateUserDetails({ [name]: value }));
+    const updatedDetails = { ...editedDetails, [name]: value };
+    setEditedDetails(updatedDetails);
+    dispatch(updateUserDetails(updatedDetails));
   };
-
-  const [editMode, setEditMode] = useState(false);
 
   const handleToggleEdit = () => {
     setEditMode(true);
   };
 
   const handleCancelEdit = () => {
+    dispatch(cancelUpdate(previousDetails));
+    setEditedDetails({ ...previousDetails });
     setEditMode(false);
   };
 
   const handleSave = () => {
+    setPreviousDetails({ fullName, email, jobTitle, phone, address });
     setEditMode(false);
   };
 
@@ -71,7 +84,7 @@ const UserDetails = () => {
         </div>
       ) : (
         <div>
-          <div className="p-5 bg-white-500 border rounded-md">
+          <div className="p-5 bg-white border rounded-md">
             <p className="text-2xl font-bold mb-5">Edit personal details</p>
             <label>Full Name</label>
             <input
@@ -91,27 +104,27 @@ const UserDetails = () => {
                 name="jobTitle"
               ></input>
             </label>
-            <div className="flex justify-between my-2">
-              <label>
-                Email
+            <div className="flex my-2">
+              <div className="mr-5 w-1/2">
+                <label className="block">Email</label>
                 <input
                   placeholder="Enter email"
-                  className=" border rounded-md border-gray-300 p-2 mb-4"
+                  className="w-full border rounded-md border-gray-300 p-2 mb-4"
                   onChange={handleChange}
                   value={email}
                   name="email"
                 ></input>
-              </label>
-              <label>
-                Phone
+              </div>
+              <div className=" w-1/2">
+                <label className="block">Phone</label>
                 <input
                   placeholder="Enter phone"
-                  className=" border rounded-md border-gray-300 p-2"
+                  className="w-full border rounded-md border-gray-300 p-2"
                   onChange={handleChange}
                   value={phone}
                   name="phone"
                 ></input>
-              </label>
+              </div>
             </div>
             <label>
               Address

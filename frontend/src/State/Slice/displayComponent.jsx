@@ -3,47 +3,56 @@ import { createSlice } from "@reduxjs/toolkit";
 const displayComponent = createSlice({
   name: "ShowComponent",
   initialState: {
+    componentInEditMode: "",
+    newContent: "",
+    componentIsExpanded: "",
     education: {
       education: false,
-      isExpanded: true,
     },
     project: {
       project: false,
-      isExpanded: false,
     },
     experience: {
       experience: false,
-      isExpanded: false,
     },
     profile: {
       profile: false,
-      isexpanded: false,
     },
     course: {
       course: false,
-      isExpanded: false,
     },
     skill: {
       skill: false,
-      isExpanded: false,
     },
     certificate: {
       certificate: false,
-      isExpanded: false,
+    },
+    award: {
+      award: false,
     },
   },
   reducers: {
     toggleShowComponent: (state, action) => {
-      state[action.payload][action.payload] =
-        !state[action.payload][action.payload];
+      const { section, toShow } = action.payload;
+      state[section][section] = toShow;
     },
-    toggleExpandComponent: (state, action) => {
-      state[action.payload]["isExpanded"] =
-        !state[action.payload]["isExpanded"];
+    setcomponentIsExpanded: (state, action) => {
+      state["componentIsExpanded"] = action.payload;
+    },
+
+    setComponentInEditMode: (state, action) => {
+      state["componentInEditMode"] = action.payload;
+    },
+    setNewContent: (state, action) => {
+      state["newContent"] = action.payload;
     },
   },
 });
 
-export const { toggleShowComponent, toggleExpandComponent } =
-  displayComponent.actions;
+export const {
+  toggleShowComponent,
+  setcomponentIsExpanded,
+  setComponentInEditMode,
+  setNewContent,
+} = displayComponent.actions;
 export default displayComponent.reducer;
