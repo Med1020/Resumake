@@ -1,11 +1,10 @@
 import Education from "../Components/ResumeContents/Education";
 
 export const content = [
-  "Profile",
   "Education",
-  "Professional Experience",
+  "Experience",
   "Skill",
-  "Certificates",
+  "Certificate",
   "Project",
   "Award",
   "Course",

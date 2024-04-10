@@ -1,20 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
+import Harvard from "../Format/Harvard";
 
 const ResumeView = () => {
-  const { fullName, email, jobTitle, phone, address } = useSelector(
-    (state) => state.userDetails
-  );
-
-  return (
-    <div>
-      <header>{fullName}</header>
-      <p>{jobTitle}</p>
-      <p>{email}</p>
-      <p>{phone}</p>
-      <p>{address}</p>
-    </div>
-  );
+  return <Harvard />;
 };
 
 export default ResumeView;
