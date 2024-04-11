@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ResumeName from "../Components/ResumeName";
 import UserDetails from "../Components/UserDetails";
 import ResumeView from "../Components/ResumeView";
@@ -10,10 +10,11 @@ import Project from "../Components/ResumeContents/Project";
 import Skill from "../Components/ResumeContents/Skill";
 import Course from "../Components/ResumeContents/Course";
 import Award from "../Components/ResumeContents/Award";
-import { DragDropContext, Droppable } from "react-beautiful-dnd";
+import SideNavBar from "../Components/SideNavBar";
 
 const CreateResume = () => {
   const [showModal, setShowModal] = useState(false);
+
   const handleCloseModal = () => {
     setShowModal(false);
   };
@@ -28,13 +29,16 @@ const CreateResume = () => {
   } = useSelector((state) => state.showComponent);
 
   const { componentInEditMode } = useSelector((state) => state.showComponent);
-  const onDragEnd = () => {};
 
   return (
     <div className="flex justify-between">
+      <div>
+        <SideNavBar />
+      </div>
       <div className="w-1/2 mx-10">
         <ResumeName />
         <UserDetails />
+
         {education && <Education />}
         {experience && <Experience />}
         {project && <Project />}
@@ -51,8 +55,10 @@ const CreateResume = () => {
           </button>
         )}
       </div>
-      <div className="bg-white w-1/2 my-5 mx-10 shadow-md min-h-screen">
-        <ResumeView />
+      <div className="w-1/2 mx-10 ">
+        <div className="bg-white mt-2 mb-4 shadow-md scroll-smooth max-h-screen sticky top-4 ">
+          <ResumeView />
+        </div>
       </div>
 
       {showModal && <ContentModal handleCloseModal={handleCloseModal} />}

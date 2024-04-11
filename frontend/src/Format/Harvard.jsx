@@ -14,7 +14,7 @@ const Harvard = () => {
   } = useSelector((state) => state.resumeContent);
   return (
     <div className="container">
-      <div className="p-10">
+      <div className="p-10 ">
         {/* basic info */}
         <div className="text-center">
           <h2 className="text-2xl font-bold mb-1">{fullName}</h2>
