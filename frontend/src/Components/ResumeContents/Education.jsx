@@ -11,6 +11,7 @@ import CancelSave from "../CancelSaveBtns";
 import { v4 as uuidv4 } from "uuid";
 import useCustomHooks from "../../customHooks/customHook";
 import { RxDragHandleDots2 } from "react-icons/rx";
+import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 
 const Education = () => {
   const { componentInEditMode, componentIsExpanded } = useSelector(
@@ -115,6 +116,8 @@ const Education = () => {
     dispatch(setComponentInEditMode("education"));
   };
 
+  const onDragEnd = () => {};
+
   return (
     <div>
       {educationList.length > 0 && componentInEditMode === "" && (
@@ -144,38 +147,68 @@ const Education = () => {
             </div>
           </div>
           <div>
-            {componentIsExpanded === "education" &&
-              educationList.map(
-                ({ id, school, degree, city, country, startDate, endDate }) => (
-                  <div className="my-3 p-5 w-full border-y-2 flex justify-between cursor-pointer  ">
-                    <div className="flex justify-center items-center p-4 cursor-move ">
-                      <RxDragHandleDots2 />
-                    </div>
-                    <div className="w-full" onClick={() => onEdit(id)}>
-                      <span className="font-bold">
-                        {school}
-                        <span>,</span>
-                      </span>
-                      <span className="font-italic">{degree}</span>
-                      <p>
-                        {city}
-                        <span>|</span> {country}
-                        <span>|</span> {startDate}
-                        <span>|</span>
-                        {endDate}
-                      </p>
-                    </div>
-                    <div>
-                      <button
-                        className="bg-white hover:bg-gray-200 rounded-full p-4"
-                        onClick={() => onDelete(id)}
-                      >
-                        <MdOutlineDelete />
-                      </button>
-                    </div>
+            <DragDropContext onDragEnd={onDragEnd}>
+              <Droppable droppableId={"edu"}>
+                {(provided) => (
+                  <div ref={provided.innerRef} {...provided.droppableProps}>
+                    {componentIsExpanded === "education" &&
+                      educationList.map(
+                        (
+                          {
+                            id,
+                            school,
+                            degree,
+                            city,
+                            country,
+                            startDate,
+                            endDate,
+                          },
+                          index
+                        ) => (
+                          <Draggable draggableId={id.toString()} index={index}>
+                            {(provided) => (
+                              <div
+                                className="my-3 p-5 w-full border-y-2 flex justify-between cursor-pointer"
+                                ref={provided.innerRef}
+                                {...provided.draggableProps}
+                              >
+                                <div className="flex justify-center items-center p-4 cursor-move ">
+                                  <RxDragHandleDots2 />
+                                </div>
+                                <div
+                                  className="w-full"
+                                  onClick={() => onEdit(id)}
+                                >
+                                  <span className="font-bold">
+                                    {school}
+                                    <span>,</span>
+                                  </span>
+                                  <span className="font-italic">{degree}</span>
+                                  <p>
+                                    {city}
+                                    <span>|</span> {country}
+                                    <span>|</span> {startDate}
+                                    <span>|</span>
+                                    {endDate}
+                                  </p>
+                                </div>
+                                <div>
+                                  <button
+                                    className="bg-white hover:bg-gray-200 rounded-full p-4"
+                                    onClick={() => onDelete(id)}
+                                  >
+                                    <MdOutlineDelete />
+                                  </button>
+                                </div>
+                              </div>
+                            )}
+                          </Draggable>
+                        )
+                      )}
                   </div>
-                )
-              )}
+                )}
+              </Droppable>
+            </DragDropContext>
             {componentIsExpanded === "education" && (
               <div className="flex justify-center">
                 <button

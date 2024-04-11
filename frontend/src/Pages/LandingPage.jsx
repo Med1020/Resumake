@@ -5,12 +5,12 @@ import { useNavigate } from "react-router-dom";
 const LandingPage = () => {
   const navigate = useNavigate();
   return (
-    <div>
+    <div className="overflow-hidden">
       <TopNav />
-      <div className="flex min-h-screen items-center justify-center overflow-hidden">
+      <div className="flex min-h-screen items-center justify-center ">
         <div className="absolute top-1/2 transform -translate-y-1/2 text-center ">
           <header className="text-5xl font-bold">
-            Build with your first resume
+            Get started with your first resume
           </header>
           <button
             className="mt-5 p-2 rounded-lg text-white bg-black"
