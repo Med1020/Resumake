@@ -5,11 +5,12 @@ import {
   setcomponentIsExpanded,
 } from "../../State/Slice/displayComponent";
 import CancelSave from "../CancelSaveBtns";
-import Draggable from "react-draggable";
 import { v4 as uuidv4 } from "uuid";
 import { IoIosArrowUp, IoIosArrowDown } from "react-icons/io";
 import { MdOutlineDelete } from "react-icons/md";
 import useCustomHooks from "../../customHooks/customHook";
+import { RxDragHandleDots2 } from "react-icons/rx";
+import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
 
 const Course = () => {
   const { componentInEditMode, componentIsExpanded } = useSelector(
@@ -17,8 +18,13 @@ const Course = () => {
   );
   const { courseList } = useSelector((state) => state.resumeContent);
 
-  const { handleDelete, handleChange, handleCancel, handleSave } =
-    useCustomHooks();
+  const {
+    handleDelete,
+    handleChange,
+    handleCancel,
+    handleSave,
+    handleDragEnd,
+  } = useCustomHooks();
 
   const dispatch = useDispatch();
 
@@ -81,76 +87,116 @@ const Course = () => {
     setPreviousState(elementToEdit);
     dispatch(setComponentInEditMode("course"));
   };
-
+  const onDragEnd = (result) => {
+    handleDragEnd({ result: result, elementName: "course" });
+  };
   return (
     <div>
       {courseList.length > 0 && componentInEditMode === "" && (
         <div className="bg-white my-3 p-5 w-full rounded-lg ">
-          <div
-            className=" flex justify-between cursor-pointer"
-            onClick={() =>
-              dispatch(
-                componentIsExpanded === "course"
-                  ? dispatch(setcomponentIsExpanded(""))
-                  : dispatch(setcomponentIsExpanded("course"))
-              )
-            }
-          >
-            <header className="p-1 text-xl font-bold text-neutral-700">
-              Course
-            </header>
-            <button className="px-5">
-              {componentIsExpanded === "course" ? (
-                <IoIosArrowUp />
-              ) : (
-                <IoIosArrowDown />
-              )}
-            </button>
+          <div className=" flex items-center">
+            <div className="cursor-move">
+              <RxDragHandleDots2 />
+            </div>
+            <div
+              className=" flex justify-between w-full cursor-pointer"
+              onClick={() =>
+                dispatch(
+                  componentIsExpanded === "course"
+                    ? dispatch(setcomponentIsExpanded(""))
+                    : dispatch(setcomponentIsExpanded("course"))
+                )
+              }
+            >
+              <header className="p-1 text-xl font-bold text-neutral-700">
+                Course
+              </header>
+              <button className="px-5">
+                {componentIsExpanded === "course" ? (
+                  <IoIosArrowUp />
+                ) : (
+                  <IoIosArrowDown />
+                )}
+              </button>
+            </div>
           </div>
           <div>
-            {componentIsExpanded === "course" &&
-              courseList.map(
-                ({
-                  id,
-                  courseTitle,
-                  institution,
-                  city,
-                  country,
-                  startDate,
-                  endDate,
-                }) => (
-                  <Draggable axis="y">
-                    <div className="my-3 p-5 w-full border-y-2 flex justify-between cursor-pointer  ">
-                      <div className="w-full" onClick={() => onEdit(id)}>
-                        <span className="font-bold">
-                          {courseTitle}
-                          <span>,</span>
-                        </span>
-                        <span className="font-italic">{institution}</span>
-                        <p>
-                          {city}
-                          <span>|</span> {country}
-                          <span>|</span> {startDate}
-                          <span>|</span>
-                          {endDate}
-                        </p>
-                      </div>
-                      <div>
-                        <button
-                          className="bg-white hover:bg-gray-200 rounded-full p-4"
-                          onClick={() => onDelete(id)}
-                        >
-                          <MdOutlineDelete />
-                        </button>
-                      </div>
-                    </div>
-                  </Draggable>
-                )
-              )}
+            <DragDropContext onDragEnd={onDragEnd}>
+              <Droppable droppableId="course">
+                {(droppableProvider) => (
+                  <div
+                    ref={droppableProvider.innerRef}
+                    {...droppableProvider.droppableProps}
+                  >
+                    {componentIsExpanded === "course" &&
+                      courseList.map(
+                        ({
+                          id,
+                          courseTitle,
+                          institution,
+                          city,
+                          country,
+                          startDate,
+                          endDate,
+                        }) => (
+                          <Draggable
+                            draggableId={String(id)}
+                            index={index}
+                            key={id}
+                          >
+                            {(draggableProvider) => (
+                              <div
+                                className="my-3 p-5 w-full border-y-2 flex justify-between cursor-pointer"
+                                ref={draggableProvider.innerRef}
+                                {...draggableProvider.draggableProps}
+                              >
+                                <div
+                                  className="flex justify-center items-center p-4 cursor-move "
+                                  {...draggableProvider.dragHandleProps}
+                                >
+                                  <RxDragHandleDots2 />
+                                </div>
+                                <div
+                                  className="w-full"
+                                  onClick={() => onEdit(id)}
+                                >
+                                  <span className="font-bold">
+                                    {courseTitle}
+                                    <span>,</span>
+                                  </span>
+                                  <span className="font-italic">
+                                    {institution}
+                                  </span>
+                                  <p>
+                                    {city}
+                                    <span>|</span> {country}
+                                    <span>|</span> {startDate}
+                                    <span>|</span>
+                                    {endDate}
+                                  </p>
+                                </div>
+                                <div>
+                                  <button
+                                    className="bg-white hover:bg-gray-200 rounded-full p-4"
+                                    onClick={() => onDelete(id)}
+                                  >
+                                    <MdOutlineDelete />
+                                  </button>
+                                </div>
+                              </div>
+                            )}
+                          </Draggable>
+                        )
+                      )}
+                    {droppableProvider.placeholder}
+                  </div>
+                )}
+              </Droppable>
+            </DragDropContext>
             {componentIsExpanded === "course" && (
               <div className="flex justify-center">
                 <button
-                  className="border rounded-2xl border-2 p-2"
+                  className="border rounded-2xl border-2 p-2 m-3"
                   onClick={() => dispatch(setComponentInEditMode("course"))}
                 >
                   Add Course

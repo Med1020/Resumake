@@ -9,10 +9,10 @@ const SideNavBar = () => {
       <Link to="/">
         <img src={logo} width="75px" title="Go back to dashboard" />
       </Link>
-      <div className="m-5 ">
+      {/* <div className="m-5 cursor-pointer" onClick={handleOpenTemplates}>
         <img src={format} width="50px" title="Templates" />
         <p className="text-sm">Templates</p>
-      </div>
+      </div> */}
     </div>
   );
 };

@@ -16,6 +16,9 @@ const createListReducer = (listName) => ({
       (item) => item.id !== action.payload
     );
   },
+  [`set${listName}`]: (state, action) => {
+    state[listName] = action.payload;
+  },
 });
 
 const resumeContent = createSlice({
@@ -27,6 +30,7 @@ const resumeContent = createSlice({
     skillList: [],
     awardList: [],
     courseList: [],
+    certificateList: [],
     profileSummary: "",
   },
   reducers: {
@@ -36,6 +40,7 @@ const resumeContent = createSlice({
     ...createListReducer("skillList"),
     ...createListReducer("awardList"),
     ...createListReducer("courseList"),
+    ...createListReducer("certificateList"),
     // addEducation: (state, action) => {
     //   state.educationList.push(action.payload);
     // },
@@ -77,20 +82,30 @@ export const {
   addeducationList,
   updateeducationList,
   removeeducationList,
+  seteducationList,
   addexperienceList,
   updateexperienceList,
   removeexperienceList,
+  setexperienceList,
   addprojectList,
   updateprojectList,
   removeprojectList,
+  setprojectList,
   addskillList,
   updateskillList,
   removeskillList,
+  setskillList,
   addawardList,
   updateawardList,
   removeawardList,
+  setawardList,
   addcourseList,
   updatecourseList,
   removecourseList,
+  setcourseList,
+  addcertificateList,
+  updatecertificateList,
+  removecertificateList,
+  setcertificateList,
 } = resumeContent.actions;
 export default resumeContent.reducer;
