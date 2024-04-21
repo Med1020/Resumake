@@ -29,14 +29,19 @@ router
   })
   .post("/signup", async (req, res) => {
     try {
-      const { email, password } = req.body;
+      const { firstName, lastName, email, password } = req.body;
       const user = await User.findOne({ email });
       if (user) {
         res.status(409).json({ message: "User already exists" });
       }
-      const hashedPassword = await bycrypt.hash(password, 10);
+      const hashedPassword = await bcrypt.hash(password, 10);
 
-      const newUser = new User({ email, password: hashedPassword });
+      const newUser = new User({
+        firstName,
+        lastName,
+        email,
+        password: hashedPassword,
+      });
       await newUser.save();
       return res.status(200).json({ message: "User created successfully" });
     } catch (error) {
