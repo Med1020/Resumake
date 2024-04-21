@@ -11,6 +11,7 @@ import Skill from "../Components/ResumeContents/Skill";
 import Course from "../Components/ResumeContents/Course";
 import Award from "../Components/ResumeContents/Award";
 import SideNavBar from "../Components/SideNavBar";
+import Certificate from "../Components/ResumeContents/Certificate";
 
 const CreateResume = () => {
   const [showModal, setShowModal] = useState(false);
@@ -26,6 +27,7 @@ const CreateResume = () => {
     skill: { skill },
     course: { course },
     award: { award },
+    certificate: { certificate },
   } = useSelector((state) => state.showComponent);
 
   const { componentInEditMode } = useSelector((state) => state.showComponent);
@@ -45,6 +47,7 @@ const CreateResume = () => {
         {skill && <Skill />}
         {course && <Course />}
         {award && <Award />}
+        {certificate && <Certificate />}
 
         {!componentInEditMode && (
           <button
@@ -55,8 +58,8 @@ const CreateResume = () => {
           </button>
         )}
       </div>
-      <div className="w-1/2 mx-10 ">
-        <div className="bg-white mt-2 mb-4 shadow-md scroll-smooth max-h-screen sticky top-4 ">
+      <div className=" w-1/2 mx-10">
+        <div className="bg-white shadow-md m-8 min-h-screen">
           <ResumeView />
         </div>
       </div>

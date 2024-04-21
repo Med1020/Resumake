@@ -12,11 +12,11 @@ import useCustomHooks from "../../customHooks/customHook";
 import { RxDragHandleDots2 } from "react-icons/rx";
 import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
 
-const Skill = () => {
+const Certificate = () => {
   const { componentInEditMode, componentIsExpanded } = useSelector(
     (state) => state.showComponent
   );
-  const { skillList } = useSelector((state) => state.resumeContent);
+  const { certificateList } = useSelector((state) => state.resumeContent);
 
   const {
     handleDelete,
@@ -28,18 +28,19 @@ const Skill = () => {
 
   const dispatch = useDispatch();
 
-  const [newSkill, setNewSkill] = useState({
+  const [newCertificate, setNewCertificate] = useState({
     id: uuidv4(),
-
-    title: "",
+    certificate: "",
+    AdditionalInfo: "",
   });
   const [previousState, setPreviousState] = useState(null);
 
   const onSave = () => {
-    handleSave({ newState: newSkill, elementName: "skill" });
-    setNewSkill({
+    handleSave({ newState: newCertificate, elementName: "certificate" });
+    setNewCertificate({
       id: uuidv4(),
-      title: "",
+      certificate: "",
+      AdditionalInfo: "",
     });
     setPreviousState(null);
   };
@@ -47,37 +48,39 @@ const Skill = () => {
   const onCancel = () => {
     handleCancel({
       previousState: previousState,
-      newState: newSkill,
-      elementName: "skill",
+      newState: newCertificate,
+      elementName: "certificate",
     });
-    setNewSkill({
+    setNewCertificate({
       id: uuidv4(),
-      title: "",
+      certificate: "",
+      AdditionalInfo: "",
     });
   };
   const onDelete = (id) => {
-    handleDelete(id, "skill");
+    handleDelete(id, "certificate");
   };
   const onChange = (e) => {
     const { name, value } = e.target;
-    const updatedSkill = { ...newSkill, [name]: value };
-    setNewSkill(updatedSkill);
-    handleChange(newSkill.id, updatedSkill, "skill");
+    const updatedCertificate = { ...newCertificate, [name]: value };
+    setNewCertificate(updatedCertificate);
+    handleChange(newCertificate.id, updatedCertificate, "certificate");
   };
   const onEdit = (id) => {
-    const [elementToEdit] = skillList.filter((skill) => skill.id === id);
-    setNewSkill(elementToEdit);
+    const [elementToEdit] = certificateList.filter(
+      (certificate) => certificate.id === id
+    );
+    setNewCertificate(elementToEdit);
     setPreviousState(elementToEdit);
-    dispatch(setComponentInEditMode("skill"));
+    dispatch(setComponentInEditMode("certificate"));
   };
   const onDragEnd = (result) => {
-    handleDragEnd({ result: result, elementName: "education" });
+    handleDragEnd({ result: result, elementName: "certificate" });
   };
-
   return (
     <div>
-      {skillList.length > 0 && componentInEditMode === "" && (
-        <div className="bg-white my-3 p-5 w-full rounded-lg ">
+      {certificateList.length > 0 && componentInEditMode === "" && (
+        <div className="bg-white my-3 p-5 w-full rounded-lg">
           <div className=" flex items-center">
             <div className="cursor-move">
               <RxDragHandleDots2 />
@@ -86,17 +89,17 @@ const Skill = () => {
               className=" flex justify-between w-full cursor-pointer"
               onClick={() =>
                 dispatch(
-                  componentIsExpanded === "skill"
+                  componentIsExpanded === "certificate"
                     ? dispatch(setcomponentIsExpanded(""))
-                    : dispatch(setcomponentIsExpanded("skill"))
+                    : dispatch(setcomponentIsExpanded("certificate"))
                 )
               }
             >
               <header className="p-1 text-xl font-bold text-neutral-700">
-                Skill
+                Certificate
               </header>
               <button className="px-5">
-                {componentIsExpanded === "skill" ? (
+                {componentIsExpanded === "certificate" ? (
                   <IoIosArrowUp />
                 ) : (
                   <IoIosArrowDown />
@@ -106,26 +109,26 @@ const Skill = () => {
           </div>
           <div>
             <DragDropContext onDragEnd={onDragEnd}>
-              <Droppable droppableId="skill">
+              <Droppable droppableId="certificate">
                 {(droppableProvider) => (
                   <div
                     ref={droppableProvider.innerRef}
                     {...droppableProvider.droppableProps}
                   >
-                    {componentIsExpanded === "skill" &&
-                      skillList.map(({ id, title }, index) => (
-                        <Draggable
-                          draggableId={String(id)}
-                          index={index}
-                          key={id}
-                        >
-                          {(draggableProvider) => (
-                            <div
-                              className=" p-5 w-full border-b-2 flex justify-between cursor-pointer bg-white"
-                              ref={draggableProvider.innerRef}
-                              {...draggableProvider.draggableProps}
-                            >
-                              <div className="my-3 p-5 w-full border-y-2 flex justify-between cursor-pointer">
+                    {componentIsExpanded === "certificate" &&
+                      certificateList.map(
+                        ({ id, certificate, AdditionalInfo }, index) => (
+                          <Draggable
+                            draggableId={String(id)}
+                            index={index}
+                            key={id}
+                          >
+                            {(draggableProvider) => (
+                              <div
+                                className="p-5 w-full border-b-2 flex justify-between cursor-pointer"
+                                ref={draggableProvider.innerRef}
+                                {...draggableProvider.draggableProps}
+                              >
                                 <div
                                   className="flex justify-center items-center p-4 cursor-move "
                                   {...draggableProvider.dragHandleProps}
@@ -136,7 +139,12 @@ const Skill = () => {
                                   className="w-full"
                                   onClick={() => onEdit(id)}
                                 >
-                                  <span className="font-italic">{title}</span>
+                                  <span className="font-bold">
+                                    {certificate}
+                                  </span>
+                                  <span className="font-italic">
+                                    {AdditionalInfo}
+                                  </span>
                                 </div>
                                 <div>
                                   <button
@@ -147,22 +155,24 @@ const Skill = () => {
                                   </button>
                                 </div>
                               </div>
-                            </div>
-                          )}
-                        </Draggable>
-                      ))}
+                            )}
+                          </Draggable>
+                        )
+                      )}
                     {droppableProvider.placeholder}
                   </div>
                 )}
               </Droppable>
             </DragDropContext>
-            {componentIsExpanded === "skill" && (
+            {componentIsExpanded === "certificate" && (
               <div className="flex justify-center">
                 <button
-                  className="border rounded-2xl border-2 p-2"
-                  onClick={() => dispatch(setComponentInEditMode("skill"))}
+                  className="border rounded-2xl border-2 p-2 m-3"
+                  onClick={() =>
+                    dispatch(setComponentInEditMode("certificate"))
+                  }
                 >
-                  Add Skill
+                  Add Certificate
                 </button>
               </div>
             )}
@@ -170,21 +180,34 @@ const Skill = () => {
         </div>
       )}
 
-      {componentInEditMode === "skill" && (
+      {componentInEditMode === "certificate" && (
         <>
           <div className="bg-white my-3 p-5 w-full rounded-lg shadow-lg ">
             <div className="p-1">
-              <h1 className="text-xl font-bold mb-5">Add Skill</h1>
-              <label htmlFor="title" className="block py-2 font-semibold">
-                Title
+              <h1 className="text-xl font-bold mb-5">Create Certificate</h1>
+              <label htmlFor="certificate" className="block py-2 font-semibold">
+                Certificate
               </label>
               <input
-                id="title"
-                name="title"
-                placeholder="Enter skill"
+                id="certificate"
+                name="certificate"
+                placeholder="Enter certificate "
                 className="block border rounded-md border-gray-300 w-full p-2 mb-4 bg-gray-100"
                 onChange={onChange}
-                value={newSkill.title}
+                value={newCertificate.certificate}
+              />
+            </div>
+            <div className="p-1">
+              <label htmlFor="info" className="block py-2 font-semibold">
+                Additional Information
+              </label>
+              <input
+                id="info"
+                name="info"
+                placeholder="any additional information"
+                className="block border rounded-md border-gray-300 w-full p-2 mb-4 bg-gray-100"
+                onChange={onChange}
+                value={newCertificate.AdditionalInfo}
               />
             </div>
           </div>
@@ -196,4 +219,4 @@ const Skill = () => {
   );
 };
 
-export default Skill;
+export default Certificate;

@@ -11,7 +11,7 @@ import CancelSave from "../CancelSaveBtns";
 import { v4 as uuidv4 } from "uuid";
 import useCustomHooks from "../../customHooks/customHook";
 import { RxDragHandleDots2 } from "react-icons/rx";
-import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
+import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
 
 const Education = () => {
   const { componentInEditMode, componentIsExpanded } = useSelector(
@@ -19,8 +19,13 @@ const Education = () => {
   );
   const { educationList } = useSelector((state) => state.resumeContent);
 
-  const { handleDelete, handleChange, handleCancel, handleSave } =
-    useCustomHooks();
+  const {
+    handleDelete,
+    handleChange,
+    handleCancel,
+    handleSave,
+    handleDragEnd,
+  } = useCustomHooks();
 
   const dispatch = useDispatch();
 
@@ -37,14 +42,6 @@ const Education = () => {
   const [previousState, setPreviousState] = useState(null);
 
   const onSave = () => {
-    // const existingEducation = educationList.filter(
-    //   (edu) => edu.id === newEducation.id
-    // );
-    // if (!existingEducation.length > 0) {
-    //   dispatch(addEducation(newEducation));
-    // }
-    // dispatch(setComponentInEditMode(""));
-    // dispatch(setcomponentIsExpanded("education"));
     handleSave({ newState: newEducation, elementName: "education" });
     setNewEducation({
       id: uuidv4(),
@@ -75,23 +72,10 @@ const Education = () => {
       endDate: "",
       description: "",
     });
-    // if (educationList.length <= 1 && !previousState) {
-    //   dispatch(toggleShowComponent({ section: "education", toShow: false }));
-    //   dispatch(removeEducation(newEducation.id));
-    // }
-    // if (previousState) {
-    //   dispatch(updateEducation(previousState));
-    // }
-    // dispatch(setComponentInEditMode(""));
-    // dispatch(setcomponentIsExpanded("education"));
   };
 
   const onDelete = (id) => {
     handleDelete(id, "education");
-    // dispatch(removeEducation(id));
-    // if (educationList.length <= 1) {
-    //   dispatch(toggleShowComponent({ section: "education", toShow: false }));
-    // }
   };
 
   const onChange = (e) => {
@@ -99,14 +83,6 @@ const Education = () => {
     const updatedEducation = { ...newEducation, [name]: value };
     setNewEducation(updatedEducation);
     handleChange(newEducation.id, updatedEducation, "education");
-    // const existingEducation = educationList.filter(
-    //   (edu) => edu.id === newEducation.id
-    // );
-    // if (existingEducation.length > 0) {
-    //   dispatch(updateEducation(updatedEducation));
-    // } else {
-    //   dispatch(addEducation(updatedEducation));
-    // }
   };
 
   const onEdit = (id) => {
@@ -116,13 +92,15 @@ const Education = () => {
     dispatch(setComponentInEditMode("education"));
   };
 
-  const onDragEnd = () => {};
+  const onDragEnd = (result) => {
+    handleDragEnd({ result: result, elementName: "education" });
+  };
 
   return (
     <div>
       {educationList.length > 0 && componentInEditMode === "" && (
         <div className="bg-white my-3 p-5 w-full rounded-lg ">
-          <div className=" flex items-center">
+          <div className="flex items-center">
             <div className="cursor-move">
               <RxDragHandleDots2 />
             </div>
@@ -148,9 +126,12 @@ const Education = () => {
           </div>
           <div>
             <DragDropContext onDragEnd={onDragEnd}>
-              <Droppable droppableId={"edu"}>
-                {(provided) => (
-                  <div ref={provided.innerRef} {...provided.droppableProps}>
+              <Droppable droppableId="education">
+                {(droppableProvider) => (
+                  <div
+                    ref={droppableProvider.innerRef}
+                    {...droppableProvider.droppableProps}
+                  >
                     {componentIsExpanded === "education" &&
                       educationList.map(
                         (
@@ -165,14 +146,21 @@ const Education = () => {
                           },
                           index
                         ) => (
-                          <Draggable draggableId={id.toString()} index={index}>
-                            {(provided) => (
+                          <Draggable
+                            draggableId={String(id)}
+                            index={index}
+                            key={id}
+                          >
+                            {(draggableProvider) => (
                               <div
-                                className="my-3 p-5 w-full border-y-2 flex justify-between cursor-pointer"
-                                ref={provided.innerRef}
-                                {...provided.draggableProps}
+                                className="p-5 w-full border-b-2 flex justify-between cursor-pointer bg-white"
+                                ref={draggableProvider.innerRef}
+                                {...draggableProvider.draggableProps}
                               >
-                                <div className="flex justify-center items-center p-4 cursor-move ">
+                                <div
+                                  className="flex justify-center items-center p-4 cursor-move "
+                                  {...draggableProvider.dragHandleProps}
+                                >
                                   <RxDragHandleDots2 />
                                 </div>
                                 <div
@@ -205,6 +193,7 @@ const Education = () => {
                           </Draggable>
                         )
                       )}
+                    {droppableProvider.placeholder}
                   </div>
                 )}
               </Droppable>
@@ -212,7 +201,7 @@ const Education = () => {
             {componentIsExpanded === "education" && (
               <div className="flex justify-center">
                 <button
-                  className="border rounded-2xl border-2 p-2"
+                  className="border rounded-2xl border-2 p-2 m-3"
                   onClick={() => dispatch(setComponentInEditMode("education"))}
                 >
                   Add Education

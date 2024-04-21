@@ -5,11 +5,12 @@ import {
   setcomponentIsExpanded,
 } from "../../State/Slice/displayComponent";
 import CancelSave from "../CancelSaveBtns";
-import Draggable from "react-draggable";
 import { v4 as uuidv4 } from "uuid";
 import { IoIosArrowUp, IoIosArrowDown } from "react-icons/io";
 import { MdOutlineDelete } from "react-icons/md";
 import useCustomHooks from "../../customHooks/customHook";
+import { RxDragHandleDots2 } from "react-icons/rx";
+import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
 
 const Award = () => {
   const { componentInEditMode, componentIsExpanded } = useSelector(
@@ -72,68 +73,107 @@ const Award = () => {
     setPreviousState(elementToEdit);
     dispatch(setComponentInEditMode("award"));
   };
+  const onDragEnd = (result) => {
+    handleDragEnd({ result: result, elementName: "award" });
+  };
 
   return (
     <div>
       {awardList.length > 0 && componentInEditMode === "" && (
         <div className="bg-white my-3 p-5 w-full rounded-lg ">
-          <div
-            className=" flex justify-between cursor-pointer"
-            onClick={() =>
-              dispatch(
-                componentIsExpanded === "award"
-                  ? dispatch(setcomponentIsExpanded(""))
-                  : dispatch(setcomponentIsExpanded("award"))
-              )
-            }
-          >
-            <header className="p-1 text-xl font-bold text-neutral-700">
-              Award
-            </header>
-            <button className="px-5">
-              {componentIsExpanded === "award" ? (
-                <IoIosArrowUp />
-              ) : (
-                <IoIosArrowDown />
+          <div className=" flex items-center">
+            <div className="cursor-move">
+              <RxDragHandleDots2 />
+            </div>
+            <div
+              className=" flex justify-between w-full  cursor-pointer"
+              onClick={() =>
+                dispatch(
+                  componentIsExpanded === "award"
+                    ? dispatch(setcomponentIsExpanded(""))
+                    : dispatch(setcomponentIsExpanded("award"))
+                )
+              }
+            >
+              <header className="p-1 text-xl font-bold text-neutral-700">
+                Award
+              </header>
+              <button className="px-5">
+                {componentIsExpanded === "award" ? (
+                  <IoIosArrowUp />
+                ) : (
+                  <IoIosArrowDown />
+                )}
+              </button>
+            </div>
+            <div>
+              <DragDropContext onDragEnd={onDragEnd}>
+                <Droppable droppableId="award">
+                  {(droppableProvider) => (
+                    <div
+                      ref={droppableProvider.innerRef}
+                      {...droppableProvider.droppableProps}
+                    >
+                      {componentIsExpanded === "award" &&
+                        awardList.map(({ id, award, issuer, date }, index) => (
+                          <Draggable
+                            draggableId={String(id)}
+                            index={index}
+                            key={id}
+                          >
+                            {(draggableProvider) => (
+                              <div
+                                className="p-5 w-full border-b-2 flex justify-between cursor-pointer bg-white"
+                                ref={draggableProvider.innerRef}
+                                {...draggableProvider.draggableProps}
+                              >
+                                <div
+                                  className="flex justify-center items-center p-4 cursor-move "
+                                  {...draggableProvider.dragHandleProps}
+                                >
+                                  <RxDragHandleDots2 />
+                                </div>
+                                <div
+                                  className="w-full"
+                                  onClick={() => onEdit(id)}
+                                >
+                                  <span className="font-bold">
+                                    {award}
+                                    <span>,</span>
+                                  </span>
+                                  <span className="font-italic">{issuer}</span>
+                                  <p>
+                                    <span>{date}</span>
+                                  </p>
+                                </div>
+                                <div>
+                                  <button
+                                    className="bg-white hover:bg-gray-200 rounded-full p-4"
+                                    onClick={() => onDelete(id)}
+                                  >
+                                    <MdOutlineDelete />
+                                  </button>
+                                </div>
+                              </div>
+                            )}
+                          </Draggable>
+                        ))}
+                      {droppableProvider.placeholder}
+                    </div>
+                  )}
+                </Droppable>
+              </DragDropContext>
+              {componentIsExpanded === "award" && (
+                <div className="flex justify-center">
+                  <button
+                    className="border rounded-2xl border-2 p-2"
+                    onClick={() => dispatch(setComponentInEditMode("award"))}
+                  >
+                    Add Award
+                  </button>
+                </div>
               )}
-            </button>
-          </div>
-          <div>
-            {componentIsExpanded === "award" &&
-              awardList.map(({ id, award, issuer, date }) => (
-                <Draggable axis="y">
-                  <div className="my-3 p-5 w-full border-y-2 flex justify-between cursor-pointer  ">
-                    <div className="w-full" onClick={() => onEdit(id)}>
-                      <span className="font-bold">
-                        {award}
-                        <span>,</span>
-                      </span>
-                      <span className="font-italic">{issuer}</span>
-                      <p>
-                        <span>{date}</span>
-                      </p>
-                    </div>
-                    <div>
-                      <button
-                        className="bg-white hover:bg-gray-200 rounded-full p-4"
-                        onClick={() => onDelete(id)}
-                      >
-                        <MdOutlineDelete />
-                      </button>
-                    </div>
-                  </div>
-                </Draggable>
-              ))}
-            {componentIsExpanded === "award" && (
-              <div className="flex justify-center">
-                <button
-                  className="border rounded-2xl border-2 p-2"
-                  onClick={() => dispatch(setComponentInEditMode("award"))}
-                >
-                  Add Award
-                </button>
-              </div>
-            )}
+            </div>
           </div>
         </div>
       )}

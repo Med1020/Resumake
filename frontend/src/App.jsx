@@ -10,7 +10,6 @@ function App() {
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/resume" element={<CreateResume />} />
-        <Route path="/format" element={<HardwareResume />} />
         <Route path="/login" element={<Login />} />
       </Routes>
     </div>

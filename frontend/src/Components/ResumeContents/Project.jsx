@@ -5,11 +5,12 @@ import {
   setcomponentIsExpanded,
 } from "../../State/Slice/displayComponent";
 import CancelSave from "../CancelSaveBtns";
-import Draggable from "react-draggable";
 import { v4 as uuidv4 } from "uuid";
 import { IoIosArrowUp, IoIosArrowDown } from "react-icons/io";
 import { MdOutlineDelete } from "react-icons/md";
 import useCustomHooks from "../../customHooks/customHook";
+import { RxDragHandleDots2 } from "react-icons/rx";
+import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
 
 const Project = () => {
   const { componentInEditMode, componentIsExpanded } = useSelector(
@@ -17,8 +18,13 @@ const Project = () => {
   );
   const { projectList } = useSelector((state) => state.resumeContent);
 
-  const { handleDelete, handleChange, handleCancel, handleSave } =
-    useCustomHooks();
+  const {
+    handleDelete,
+    handleChange,
+    handleCancel,
+    handleSave,
+    handleDragEnd,
+  } = useCustomHooks();
 
   const dispatch = useDispatch();
 
@@ -75,64 +81,110 @@ const Project = () => {
     setPreviousState(elementToEdit);
     dispatch(setComponentInEditMode("project"));
   };
+  const onDragEnd = (result) => {
+    handleDragEnd({ result: result, elementName: "project" });
+  };
 
   return (
     <div>
       {projectList.length > 0 && componentInEditMode === "" && (
         <div className="bg-white my-3 p-5 w-full rounded-lg ">
-          <div
-            className=" flex justify-between cursor-pointer"
-            onClick={() =>
-              dispatch(
-                componentIsExpanded === "project"
-                  ? dispatch(setcomponentIsExpanded(""))
-                  : dispatch(setcomponentIsExpanded("project"))
-              )
-            }
-          >
-            <header className="p-1 text-xl font-bold text-neutral-700">
-              Project
-            </header>
-            <button className="px-5">
-              {componentIsExpanded === "project" ? (
-                <IoIosArrowUp />
-              ) : (
-                <IoIosArrowDown />
-              )}
-            </button>
+          <div className="flex items-center">
+            <div className="cursor-move">
+              <RxDragHandleDots2 />
+            </div>
+            <div
+              className=" flex justify-between w-full cursor-pointer"
+              onClick={() =>
+                dispatch(
+                  componentIsExpanded === "project"
+                    ? dispatch(setcomponentIsExpanded(""))
+                    : dispatch(setcomponentIsExpanded("project"))
+                )
+              }
+            >
+              <header className="p-1 text-xl font-bold text-neutral-700">
+                Project
+              </header>
+              <button className="px-5">
+                {componentIsExpanded === "project" ? (
+                  <IoIosArrowUp />
+                ) : (
+                  <IoIosArrowDown />
+                )}
+              </button>
+            </div>
           </div>
           <div>
-            {componentIsExpanded === "project" &&
-              projectList.map(({ id, title, subTitle, startDate, endDate }) => (
-                <Draggable axis="y">
-                  <div className="my-3 p-5 w-full border-y-2 flex justify-between cursor-pointer  ">
-                    <div className="w-full" onClick={() => onEdit(id)}>
-                      <span className="font-bold">
-                        {title}
-                        <span>,</span>
-                      </span>
-                      <span className="font-italic">{subTitle}</span>
-                      <p>
-                        <span>{startDate}</span>
-                        <span>|</span>
-                        <span>{endDate}</span>
-                      </p>
-                    </div>
-                    <div>
-                      <button
-                        className="bg-white hover:bg-gray-200 rounded-full p-4"
-                        onClick={() => onDelete(id)}
-                      >
-                        <MdOutlineDelete />
-                      </button>
-                    </div>
+            <DragDropContext onDragEnd={onDragEnd}>
+              <Droppable droppableId="project">
+                {(droppableProvider) => (
+                  <div
+                    ref={droppableProvider.innerRef}
+                    {...droppableProvider.droppableProps}
+                  >
+                    {componentIsExpanded === "project" &&
+                      projectList.map(
+                        (
+                          { id, title, subTitle, startDate, endDate },
+                          index
+                        ) => (
+                          <Draggable
+                            draggableId={String(id)}
+                            index={index}
+                            key={id}
+                          >
+                            {(draggableProvider) => (
+                              <div
+                                className="p-5 w-full border-b-2 flex justify-between cursor-pointer"
+                                ref={draggableProvider.innerRef}
+                                {...draggableProvider.draggableProps}
+                              >
+                                <div
+                                  className="flex justify-center items-center p-4 cursor-move "
+                                  {...draggableProvider.dragHandleProps}
+                                >
+                                  <RxDragHandleDots2 />
+                                </div>
+                                <div
+                                  className="w-full"
+                                  onClick={() => onEdit(id)}
+                                >
+                                  <span className="font-bold">
+                                    {title}
+                                    <span>,</span>
+                                  </span>
+                                  <span className="font-italic">
+                                    {subTitle}
+                                  </span>
+                                  <p>
+                                    <span>{startDate}</span>
+                                    <span>|</span>
+                                    <span>{endDate}</span>
+                                  </p>
+                                </div>
+                                <div>
+                                  <button
+                                    className="bg-white hover:bg-gray-200 rounded-full p-4"
+                                    onClick={() => onDelete(id)}
+                                  >
+                                    <MdOutlineDelete />
+                                  </button>
+                                </div>
+                              </div>
+                            )}
+                          </Draggable>
+                        )
+                      )}
+                    {droppableProvider.placeholder}
                   </div>
-                </Draggable>
-              ))}
+                )}
+              </Droppable>
+            </DragDropContext>
             {componentIsExpanded === "project" && (
               <div className="flex justify-center">
                 <button
-                  className="border rounded-2xl border-2 p-2"
+                  className="border rounded-2xl border-2 p-2 mt-4"
                   onClick={() => dispatch(setComponentInEditMode("project"))}
                 >
                   Add Project
