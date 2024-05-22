@@ -28,10 +28,10 @@ It provides users with an intuitive interface to input their information, select
    
 ## Usage
 
-Register or login to the application using your credentials
-Create a new resume or import an existing one
-Customize the resume content, formatting, and template
-Download the generated resume in your preferred format
-Share the resume with potential employers or colleagues
+- Register or login to the application using your credentials
+- Create a new resume or import an existing one
+- Customize the resume content, formatting, and template
+- Download the generated resume in your preferred format
+- Share the resume with potential employers or colleagues
 
 
