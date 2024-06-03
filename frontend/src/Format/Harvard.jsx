@@ -1,4 +1,7 @@
 import { useSelector } from "react-redux";
+import { IoMail } from "react-icons/io5";
+import { FaLocationDot } from "react-icons/fa6";
+import { FaSquarePhone } from "react-icons/fa6";
 
 const Harvard = () => {
   const { fullName, email, jobTitle, phone, address } = useSelector(
@@ -17,14 +20,21 @@ const Harvard = () => {
       <div className="p-10 ">
         {/* basic info */}
         <div className="text-center">
-          <h2 className="text-2xl font-bold mb-1">{fullName}</h2>
-          <div className="mb-2">{jobTitle}</div>
-          <div className="mb-2">
-            <span className="mr-2 text-sm">{email}</span>
-            {address && <span className="p-2">|</span>}
-            <span className="mr-2 text-sm">{address}</span>
-            {phone && <span className="p-2">|</span>}
-            <span className="mr-2 text-sm">{phone}</span>
+          <h2 className="text-xl font-bold mb-1">{fullName}</h2>
+          <div className="mb-2 text-md">{jobTitle}</div>
+          <div className="mb-2 flex justify-center">
+            <div className="mr-2 text-sm flex justify-center items-center">
+              <span className="pr-2">{email && <IoMail />}</span>
+              <span>{email}</span>
+            </div>
+            <span className="mr-2 text-sm flex justify-center items-center">
+              <span className="pr-2">{address && <FaLocationDot />}</span>
+              <span>{address}</span>
+            </span>
+            <span className="mr-2 text-sm  flex justify-center items-center">
+              <span className="pr-2">{phone && <FaSquarePhone />}</span>
+              <span>{phone}</span>
+            </span>
           </div>
         </div>
         {/* skills */}
@@ -58,17 +68,27 @@ const Harvard = () => {
                 <div className="pb-3">
                   <div className="flex justify-between mb-2 " key={id}>
                     <div>
-                      <h4 className="text-sm font-semibold">{jobTitle}</h4>
-                      <h3 className="text-sm">{employer}</h3>
+                      <h4 className="text-sm font-semibold inline-block">
+                        {jobTitle}
+                      </h4>
+                      <span className="text-sm italic">
+                        {employer && " ,"}
+                        {employer}
+                      </span>
                     </div>
                     <div>
-                      <span className="text-sm">{startDate}</span>
-                      <span className="p-1">-</span>
-                      <span className="text-sm">{endDate}</span>
-                      <span className="p-2">|</span>
-                      <span className="text-sm">{city}</span>
+                      <span className="text-xs">{startDate}</span>
+                      <span className="text-xs">
+                        {endDate && <span className="p-2">-</span>}
+                        {endDate}
+                      </span>
+
+                      <span className="text-xs">
+                        {city && <span className="p-2">|</span>}
+                        {city}
+                      </span>
                       <span className="p-2">,</span>
-                      <span className="text-sm">{country}</span>
+                      <span className="text-xs">{country}</span>
                     </div>
                   </div>
                   <div>
@@ -99,16 +119,18 @@ const Harvard = () => {
                 <div className="pb-3">
                   <div className="flex justify-between" key={id}>
                     <div>
-                      <h4 className="text-md font-semibold">{school}</h4>
-                      <p className="text-sm">{degree}</p>
+                      <h4 className="text-sm font-semibold">{school}</h4>
+                      <p className="text-xs">{degree}</p>
                     </div>
                     <div>
                       <span className="text-sm">{startDate}</span>
-                      <span className="p-1">-</span>
+                      <span className="p-1">{endDate && "-"}</span>
                       <span className="text-sm">{endDate}</span>
-                      <span className="p-2">|</span>
+                      <span className="p-2">{city && "|"}</span>
                       <span className="text-sm">
-                        {city},{country}
+                        {city}
+                        {country && ","}
+                        {country}
                       </span>
                     </div>
                   </div>

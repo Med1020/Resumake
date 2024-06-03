@@ -30,7 +30,6 @@ const Skill = () => {
 
   const [newSkill, setNewSkill] = useState({
     id: uuidv4(),
-
     title: "",
   });
   const [previousState, setPreviousState] = useState(null);
@@ -71,7 +70,7 @@ const Skill = () => {
     dispatch(setComponentInEditMode("skill"));
   };
   const onDragEnd = (result) => {
-    handleDragEnd({ result: result, elementName: "education" });
+    handleDragEnd({ result: result, elementName: "skill" });
   };
 
   return (
@@ -121,31 +120,29 @@ const Skill = () => {
                         >
                           {(draggableProvider) => (
                             <div
-                              className=" p-5 w-full border-b-2 flex justify-between cursor-pointer bg-white"
+                              className="p-5 w-full border-b-2 flex justify-between items-center cursor-pointer bg-white"
                               ref={draggableProvider.innerRef}
                               {...draggableProvider.draggableProps}
                             >
-                              <div className="my-3 p-5 w-full border-y-2 flex justify-between cursor-pointer">
-                                <div
-                                  className="flex justify-center items-center p-4 cursor-move "
-                                  {...draggableProvider.dragHandleProps}
+                              <div
+                                className="flex justify-center items-center p-4 cursor-move "
+                                {...draggableProvider.dragHandleProps}
+                              >
+                                <RxDragHandleDots2 />
+                              </div>
+                              <div
+                                className="w-full"
+                                onClick={() => onEdit(id)}
+                              >
+                                <span className="font-italic">{title}</span>
+                              </div>
+                              <div>
+                                <button
+                                  className="bg-white hover:bg-gray-200 rounded-full p-4"
+                                  onClick={() => onDelete(id)}
                                 >
-                                  <RxDragHandleDots2 />
-                                </div>
-                                <div
-                                  className="w-full"
-                                  onClick={() => onEdit(id)}
-                                >
-                                  <span className="font-italic">{title}</span>
-                                </div>
-                                <div>
-                                  <button
-                                    className="bg-white hover:bg-gray-200 rounded-full p-4"
-                                    onClick={() => onDelete(id)}
-                                  >
-                                    <MdOutlineDelete />
-                                  </button>
-                                </div>
+                                  <MdOutlineDelete />
+                                </button>
                               </div>
                             </div>
                           )}
@@ -159,7 +156,7 @@ const Skill = () => {
             {componentIsExpanded === "skill" && (
               <div className="flex justify-center">
                 <button
-                  className="border rounded-2xl border-2 p-2"
+                  className="border rounded-2xl border-2 p-2 mt-4"
                   onClick={() => dispatch(setComponentInEditMode("skill"))}
                 >
                   Add Skill

@@ -37,7 +37,7 @@ const CreateResume = () => {
       <div>
         <SideNavBar />
       </div>
-      <div className="w-1/2 mx-10">
+      <div className="w-1/2 mx-5">
         <ResumeName />
         <UserDetails />
 
@@ -58,8 +58,8 @@ const CreateResume = () => {
           </button>
         )}
       </div>
-      <div className=" w-1/2 mx-10">
-        <div className="bg-white shadow-md m-8 min-h-screen">
+      <div className=" w-1/2 mx-5 resume-view">
+        <div className="bg-white shadow-md w-full my-8 min-h-screen">
           <ResumeView />
         </div>
       </div>

@@ -100,7 +100,7 @@ const Education = () => {
     <div>
       {educationList.length > 0 && componentInEditMode === "" && (
         <div className="bg-white my-3 p-5 w-full rounded-lg ">
-          <div className="flex items-center">
+          <div className=" flex items-center">
             <div className="cursor-move">
               <RxDragHandleDots2 />
             </div>
@@ -153,7 +153,7 @@ const Education = () => {
                           >
                             {(draggableProvider) => (
                               <div
-                                className="p-5 w-full border-b-2 flex justify-between cursor-pointer bg-white"
+                                className=" p-5 w-full border-b-2 flex justify-between cursor-pointer bg-white"
                                 ref={draggableProvider.innerRef}
                                 {...draggableProvider.draggableProps}
                               >
