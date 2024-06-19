@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   setComponentInEditMode,
   setcomponentIsExpanded,
-} from "../../State/Slice/displayComponent";
+} from "../../Redux/Slice/displayComponent";
 import CancelSave from "../CancelSaveBtns";
 import { v4 as uuidv4 } from "uuid";
 import { IoIosArrowUp, IoIosArrowDown } from "react-icons/io";

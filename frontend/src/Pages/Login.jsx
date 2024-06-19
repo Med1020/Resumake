@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { loginAPI } from "../Services/apiServices";
+import { loginAPI } from "../Requests/apiServices";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { setIsLoggedIn } from "../State/Slice/auth";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
+import { setLoginLogout } from "../Redux/Slice/auth";
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -26,27 +26,31 @@ const Login = () => {
 
   const onSubmit = async (data) => {
     setIsLoading(true);
+
     try {
       const response = await loginAPI({
         email: credentials.email,
         password: credentials.password,
       });
-
-      if (response?.token) {
+      if (response.status === 200) {
+        toast.success(response.data.message);
+        dispatch(setLoginLogout(true));
         navigate(-1);
-        dispatch(setIsLoggedIn(true));
-        toast.success("Logged in successfully");
-      } else if (response.message === "Invalid email") {
-        toast.error("Email does not exist");
-      } else if (response.message === "Invalid password") {
-        toast.error("Incorrect Password");
+      } else {
+        if (response === "Incorrect email") {
+          toast.error("Account does not exist with this email");
+        } else if (response === "Incorrect password") {
+          toast.error(response);
+        } else {
+          console.error("Login failed:", response);
+          toast.error("An error occurred during login");
+        }
       }
     } catch (error) {
-      console.error("Login failed:", error);
-      toast.error("An error occurred during login");
-    } finally {
-      setIsLoading(false);
+      toast.error("Server error: Try again later");
     }
+
+    setIsLoading(false);
   };
 
   return (
@@ -67,8 +71,9 @@ const Login = () => {
                 })}
                 aria-invalid={errors.email ? "true" : "false"}
                 placeholder="Enter your email"
+                id="email"
                 className="block p-2 rounded-md mt-2  w-full bg-slate-100"
-                onChange={handleChange}
+                onInput={handleChange}
               />
               {errors.email && (
                 <p className="font-xs text-red-500">{errors.email.message}</p>
@@ -83,9 +88,10 @@ const Login = () => {
                 })}
                 aria-invalid={errors.password ? "true" : "false"}
                 type="password"
+                id="password"
                 placeholder="Enter your password"
                 className="block p-2 rounded-md mt-2 w-full bg-slate-100"
-                onChange={handleChange}
+                onInput={handleChange}
               />
               {errors.password?.type === "required" && (
                 <p className="font-xs text-red-500">Password is required</p>
@@ -96,6 +102,7 @@ const Login = () => {
             </div>
             <button
               type="submit"
+              id="submit"
               disabled={isLoading ? true : false}
               className="bg-sky-500 px-3 py-2 rounded-md my-8 text-white w-full"
             >

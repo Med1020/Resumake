@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   setComponentInEditMode,
   setcomponentIsExpanded,
-} from "../../State/Slice/displayComponent";
+} from "../../Redux/Slice/displayComponent";
 import CancelSave from "../CancelSaveBtns";
 import { v4 as uuidv4 } from "uuid";
 import { IoIosArrowUp, IoIosArrowDown } from "react-icons/io";
@@ -82,7 +82,7 @@ const Experience = () => {
     handleChange(newExperience.id, updatedExperience, "experience");
   };
   const onEdit = (id) => {
-    const [elementToEdit] = experienceList.filter((exp) => exp.id === id);
+    const [elementToEdit] = experienceList.filter((exp) => exp._id === id);
     setNewExperience(elementToEdit);
     setPreviousState(elementToEdit);
     dispatch(setComponentInEditMode("experience"));
@@ -133,7 +133,7 @@ const Experience = () => {
                       experienceList.map(
                         (
                           {
-                            id,
+                            _id,
                             employer,
                             jobTitle,
                             city,
@@ -144,9 +144,9 @@ const Experience = () => {
                           index
                         ) => (
                           <Draggable
-                            draggableId={String(id)}
+                            draggableId={String(_id)}
                             index={index}
-                            key={id}
+                            key={_id}
                           >
                             {(draggableProvider) => (
                               <div
@@ -162,7 +162,7 @@ const Experience = () => {
                                 </div>
                                 <div
                                   className="w-full"
-                                  onClick={() => onEdit(id)}
+                                  onClick={() => onEdit(_id)}
                                 >
                                   <span className="font-bold">
                                     {employer}
@@ -182,7 +182,7 @@ const Experience = () => {
                                 <div>
                                   <button
                                     className="bg-white hover:bg-gray-200 rounded-full p-4"
-                                    onClick={() => onDelete(id)}
+                                    onClick={() => onDelete(_id)}
                                   >
                                     <MdOutlineDelete />
                                   </button>
@@ -200,7 +200,7 @@ const Experience = () => {
             {componentIsExpanded === "experience" && (
               <div className="flex justify-center">
                 <button
-                  className="border rounded-2xl border-2 p-2 mt-4"
+                  className="rounded-2xl border-2 p-2 mt-4"
                   onClick={() => dispatch(setComponentInEditMode("experience"))}
                 >
                   Add Experience
@@ -222,7 +222,7 @@ const Experience = () => {
               <input
                 id="employer"
                 name="employer"
-                placeholder="Enter school/university"
+                placeholder="Enter company name"
                 className="block border rounded-md border-gray-300 w-full p-2 mb-4 bg-gray-100"
                 onChange={onChange}
                 value={newExperience.employer}
@@ -235,7 +235,7 @@ const Experience = () => {
               <input
                 id="jobTitle"
                 name="jobTitle"
-                placeholder="Enter Enter Job Title"
+                placeholder="Enter Job Title"
                 className="block border rounded-md border-gray-300 w-full p-2 mb-4 bg-gray-100"
                 onChange={onChange}
                 value={newExperience.jobTitle}

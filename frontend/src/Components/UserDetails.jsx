@@ -1,15 +1,17 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { cancelUpdate, updateUserDetails } from "../State/Slice/userInfo";
+import { cancelUpdate, updateUserDetails } from "../Redux/Slice/userInfo";
 import { MdOutlineEmail } from "react-icons/md";
 import { FaPhoneAlt } from "react-icons/fa";
 import { IoLocationOutline } from "react-icons/io5";
+import { sendResumeData } from "../Requests/resumeContentaxios";
 
 const UserDetails = () => {
   const dispatch = useDispatch();
   const { fullName, email, jobTitle, phone, address } = useSelector(
     (state) => state.userDetails
   );
+  const resumeId = useSelector((state) => state.authSlice.resumeId);
 
   const [editedDetails, setEditedDetails] = useState({
     fullName,
@@ -24,11 +26,13 @@ const UserDetails = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     const updatedDetails = { ...editedDetails, [name]: value };
+
     setEditedDetails(updatedDetails);
     dispatch(updateUserDetails(updatedDetails));
   };
 
   const handleToggleEdit = () => {
+    setPreviousDetails({ fullName, email, jobTitle, phone, address });
     setEditMode(true);
   };
 
@@ -38,8 +42,9 @@ const UserDetails = () => {
     setEditMode(false);
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     setPreviousDetails({ fullName, email, jobTitle, phone, address });
+    sendResumeData(resumeId, { fullName, email, jobTitle, phone, address });
     setEditMode(false);
   };
 

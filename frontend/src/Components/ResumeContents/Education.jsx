@@ -6,7 +6,7 @@ import {
   setComponentInEditMode,
   setcomponentIsExpanded,
   toggleShowComponent,
-} from "../../State/Slice/displayComponent";
+} from "../../Redux/Slice/displayComponent";
 import CancelSave from "../CancelSaveBtns";
 import { v4 as uuidv4 } from "uuid";
 import useCustomHooks from "../../customHooks/customHook";
@@ -17,7 +17,9 @@ const Education = () => {
   const { componentInEditMode, componentIsExpanded } = useSelector(
     (state) => state.showComponent
   );
-  const { educationList } = useSelector((state) => state.resumeContent);
+  const educationList = useSelector(
+    (state) => state.resumeContent.educationList
+  );
 
   const {
     handleDelete,
@@ -75,6 +77,7 @@ const Education = () => {
   };
 
   const onDelete = (id) => {
+    // console.log(id);
     handleDelete(id, "education");
   };
 
@@ -86,7 +89,7 @@ const Education = () => {
   };
 
   const onEdit = (id) => {
-    const [elementToEdit] = educationList.filter((edu) => edu.id === id);
+    const [elementToEdit] = educationList.filter((edu) => edu._id === id);
     setNewEducation(elementToEdit);
     setPreviousState(elementToEdit);
     dispatch(setComponentInEditMode("education"));
@@ -136,7 +139,7 @@ const Education = () => {
                       educationList.map(
                         (
                           {
-                            id,
+                            _id,
                             school,
                             degree,
                             city,
@@ -147,9 +150,9 @@ const Education = () => {
                           index
                         ) => (
                           <Draggable
-                            draggableId={String(id)}
+                            draggableId={String(_id)}
                             index={index}
-                            key={id}
+                            key={_id}
                           >
                             {(draggableProvider) => (
                               <div
@@ -165,7 +168,7 @@ const Education = () => {
                                 </div>
                                 <div
                                   className="w-full"
-                                  onClick={() => onEdit(id)}
+                                  onClick={() => onEdit(_id)}
                                 >
                                   <span className="font-bold">
                                     {school}
@@ -183,7 +186,7 @@ const Education = () => {
                                 <div>
                                   <button
                                     className="bg-white hover:bg-gray-200 rounded-full p-4"
-                                    onClick={() => onDelete(id)}
+                                    onClick={() => onDelete(_id)}
                                   >
                                     <MdOutlineDelete />
                                   </button>
@@ -201,7 +204,7 @@ const Education = () => {
             {componentIsExpanded === "education" && (
               <div className="flex justify-center">
                 <button
-                  className="border rounded-2xl border-2 p-2 m-3"
+                  className="rounded-2xl border-2 p-2 m-3"
                   onClick={() => dispatch(setComponentInEditMode("education"))}
                 >
                   Add Education

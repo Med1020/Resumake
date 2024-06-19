@@ -1,14 +1,33 @@
 import React, { useState } from "react";
-import Executive from "../assets/templates/Executive.jpg";
-import Harvard from "../assets/templates/Harvard.jpg";
-import Harvard_2 from "../assets/templates/Harvard_2.jpg";
-import green from "../assets/templates/green.jpg";
+import Executive from "../../assets/templates/Executive.jpg";
+import Harvard from "../../assets/templates/Harvard.jpg";
+import Harvard_2 from "../../assets/templates/Harvard_2.jpg";
+import green from "../../assets/templates/green.jpg";
 import { Navigate, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { setResumeId } from "../../Redux/Slice/auth";
+import { createNewResume } from "../../Requests/resumeContentaxios";
 
 const TemplatesModal = ({ closeModal }) => {
   const navigate = useNavigate();
+  const { isLoggedIn } = useSelector((state) => state.authSlice);
+  const dispatch = useDispatch();
+  const handleCreateNewResume = async () => {
+    const response = await createNewResume();
+    if (response.status === 200) {
+      dispatch(setResumeId(response.data));
+    }
+  };
   const handleClick = (templateName) => {
-    navigate("/resume");
+    if (isLoggedIn) {
+      navigate("/resume");
+      handleCreateNewResume();
+    } else {
+      navigate("/login");
+    }
+
+    // const response = axios.post("/api/createNewResume");
   };
   return (
     <div className="fixed inset-0 z-10 overflow-y-auto">
