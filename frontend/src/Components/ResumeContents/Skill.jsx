@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   setComponentInEditMode,
   setcomponentIsExpanded,
-} from "../../State/Slice/displayComponent";
+} from "../../Redux/Slice/displayComponent";
 import CancelSave from "../CancelSaveBtns";
 import { v4 as uuidv4 } from "uuid";
 import { IoIosArrowUp, IoIosArrowDown } from "react-icons/io";
@@ -64,7 +64,7 @@ const Skill = () => {
     handleChange(newSkill.id, updatedSkill, "skill");
   };
   const onEdit = (id) => {
-    const [elementToEdit] = skillList.filter((skill) => skill.id === id);
+    const [elementToEdit] = skillList.filter((skill) => skill._id === id);
     setNewSkill(elementToEdit);
     setPreviousState(elementToEdit);
     dispatch(setComponentInEditMode("skill"));
@@ -112,11 +112,11 @@ const Skill = () => {
                     {...droppableProvider.droppableProps}
                   >
                     {componentIsExpanded === "skill" &&
-                      skillList.map(({ id, title }, index) => (
+                      skillList.map(({ _id, title }, index) => (
                         <Draggable
-                          draggableId={String(id)}
+                          draggableId={String(_id)}
                           index={index}
-                          key={id}
+                          key={_id}
                         >
                           {(draggableProvider) => (
                             <div
@@ -132,14 +132,14 @@ const Skill = () => {
                               </div>
                               <div
                                 className="w-full"
-                                onClick={() => onEdit(id)}
+                                onClick={() => onEdit(_id)}
                               >
                                 <span className="font-italic">{title}</span>
                               </div>
                               <div>
                                 <button
                                   className="bg-white hover:bg-gray-200 rounded-full p-4"
-                                  onClick={() => onDelete(id)}
+                                  onClick={() => onDelete(_id)}
                                 >
                                   <MdOutlineDelete />
                                 </button>
@@ -156,7 +156,7 @@ const Skill = () => {
             {componentIsExpanded === "skill" && (
               <div className="flex justify-center">
                 <button
-                  className="border rounded-2xl border-2 p-2 mt-4"
+                  className="rounded-2xl border-2 p-2 mt-4"
                   onClick={() => dispatch(setComponentInEditMode("skill"))}
                 >
                   Add Skill

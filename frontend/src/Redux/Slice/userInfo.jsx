@@ -12,10 +12,15 @@ const userInfo = createSlice({
   initialState,
   reducers: {
     updateUserDetails: (state, action) => {
-      return { ...state, ...action.payload };
+      let { fullName, email, jobTitle, phone, address } = action.payload;
+      state.fullName = fullName;
+      state.email = email;
+      state.jobTitle = jobTitle;
+      state.phone = phone;
+      state.address = address;
     },
     cancelUpdate: (state, action) => {
-      return { ...action.payload };
+      return state;
     },
   },
 });

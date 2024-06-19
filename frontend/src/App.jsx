@@ -8,6 +8,9 @@ import ResumeView from "./Components/ResumeView";
 import Signup from "./Pages/Signup";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import ProtectedRoute from "./Router/ProtectedRoute";
+import NotFound from "./Pages/NotFound";
+import DownloadResume from "./Pages/DownloadResume";
 
 function App() {
   return (
@@ -15,14 +18,19 @@ function App() {
       <ToastContainer
         position="top-center"
         hideProgressBar={true}
-        autoClose={3000}
+        autoClose={2000}
+        pauseOnFocusLoss={false}
+        draggable={false}
       />
       <Routes>
         <Route path="/" element={<LandingPage />} />
-        <Route path="/resume" element={<CreateResume />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
-        <Route path="/resume/download" element={<ResumeView />} />
+        <Route element={<ProtectedRoute />}>
+          <Route path="/resume" element={<CreateResume />} />
+          <Route path="/resume/download" element={<DownloadResume />} />
+        </Route>
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </div>
   );

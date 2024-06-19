@@ -4,6 +4,7 @@ import displayComponentReducer from "./Slice/displayComponent";
 import resumeContentReducer from "./Slice/resumeContent";
 import componentModalReducer from "./Slice/componentModal";
 import authReducer from "./Slice/auth";
+import { apiSlice } from "./Slice/apiSlice";
 
 const rootReducer = combineReducers({
   userDetails: userInfoReducer,
@@ -11,6 +12,7 @@ const rootReducer = combineReducers({
   showComponent: displayComponentReducer,
   modal: componentModalReducer,
   authSlice: authReducer,
+  // [apiSlice.reducerPath]: apiSlice.reducer,
 });
 
 export default rootReducer;

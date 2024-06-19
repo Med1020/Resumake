@@ -28,15 +28,21 @@ import {
   updatecertificateList,
   removecertificateList,
   setcertificateList,
-} from "../State/Slice/resumeContent";
+} from "../Redux/Slice/resumeContent";
 import {
   setComponentInEditMode,
   setNewContent,
   setcomponentIsExpanded,
   toggleShowComponent,
-} from "../State/Slice/displayComponent";
+} from "../Redux/Slice/displayComponent";
+import { updateUserDetails } from "../Redux/Slice/userInfo";
+import {
+  deleteResumeContent,
+  postResumeContent,
+  sendResumeData,
+} from "../Requests/resumeContentaxios";
 
-const useCustomHooks = () => {
+export default useCustomHooks = () => {
   const dispatch = useDispatch();
   const {
     educationList,
@@ -48,9 +54,11 @@ const useCustomHooks = () => {
     certificateList,
   } = useSelector((state) => state.resumeContent);
   // const { newContent } = useSelector((state) => state.showComponent);
+  const resumeId = useSelector((state) => state.authSlice.resumeId);
 
   const handleDelete = (id, elementName) => {
     //education
+    deleteResumeContent(elementName, resumeId, id);
     if (elementName === "education") {
       dispatch(removeeducationList(id));
       if (educationList.length <= 1) {
@@ -179,6 +187,7 @@ const useCustomHooks = () => {
 
   const handleSave = ({ newState, elementName }) => {
     //education
+    postResumeContent(resumeId, elementName, newState);
     if (elementName === "education") {
       const existingEducation = educationList.filter(
         (edu) => edu.id === newState.id
@@ -500,13 +509,16 @@ const useCustomHooks = () => {
       dispatch(setcertificateList(newcertificateList));
     }
   };
+  const handleAddUserInfo = (info) => {
+    dispatch(updateUserDetails(info));
+  };
+
   return {
     handleDelete,
     handleChange,
     handleCancel,
     handleSave,
     handleDragEnd,
+    handleAddUserInfo,
   };
 };
-
-export default useCustomHooks;

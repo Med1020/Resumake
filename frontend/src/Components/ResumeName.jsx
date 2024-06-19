@@ -1,13 +1,11 @@
 import React from "react";
-import { useSelector } from "react-redux";
-import Harvard from "../Format/Harvard";
+
 import axios from "axios";
 
 const ResumeName = () => {
   const handleDownloadPDF = async () => {
-    // const resumeData = <Harvard />;
     try {
-      const response = await axios.post(
+      const response = await axios.get(
         "http://localhost:5000/generate-pdf/",
         // resumeData,
         {
@@ -27,14 +25,14 @@ const ResumeName = () => {
     }
   };
   return (
-    <div className="flex justify-around border my-5 rounded-lg sticky">
+    <div className="flex justify-between bg-white border my-5 px-3 py-3 rounded-2xl sticky z-1">
       <input
         placeholder="Resume"
-        className="mx-5 bg-transparent text-xl text-black-100 font-medium active:border-none focus:border-none focus:bg-white "
+        className="mx-5 text-xl placeholder:text-black font-bold outline-none cursor-pointer "
       ></input>
 
       <button
-        className="m-2 p-2 border rounded-md bg-pink-500  text-white rounded-lg"
+        className="m-2 p-2 border  bg-pink-500 text-white rounded-lg"
         onClick={handleDownloadPDF}
       >
         Download

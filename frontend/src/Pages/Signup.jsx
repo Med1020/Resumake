@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { signupAPI } from "../Services/apiServices";
+import { signupAPI } from "../Requests/apiServices";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
@@ -12,6 +12,7 @@ const Signup = () => {
     password: "",
     confirmPassword: "",
   });
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const {
     register,
@@ -21,28 +22,33 @@ const Signup = () => {
   } = useForm();
 
   const handleChange = (e) => {
-    console.log(credentials);
     const { name, value } = e.target;
     setCredentials({ ...credentials, [name]: value });
     errors[name] && clearErrors(name);
   };
 
   const onSubmit = async (data) => {
+    setIsLoading(true);
     try {
-      const response = await signupAPI({
+      const { response } = await signupAPI({
+        firstName: credentials.firstName,
+        lastName: credentials.lastName,
         email: credentials.email,
         password: credentials.password,
       });
-
+      console.log(response);
       if (response.status === 200) {
         navigate("/login");
         toast.success("User created successfully");
-      } else {
-        toast.error("Error signing up");
+      } else if (response.status === 409) {
+        toast.error("User already exists!");
+        navigate("/login");
       }
     } catch (error) {
-      console.error("Login failed:", error);
-      toast.error("An error occurred during login");
+      console.error("Signup failed:", error);
+      toast.error("An error occurred during signup");
+    } finally {
+      setIsLoading(false);
     }
   };
   return (
@@ -70,7 +76,7 @@ const Signup = () => {
                   aria-invalid={errors.firstName ? "true" : "false"}
                   placeholder="First Name"
                   className="block p-2 rounded-md mt-2 w-full bg-slate-100"
-                  onChange={handleChange}
+                  onInput={handleChange}
                 />
               </div>
               <div className="mb-2 flex-1 inline-block">
@@ -90,7 +96,7 @@ const Signup = () => {
                   name="lastName"
                   placeholder="Last Name"
                   className="block p-2 rounded-md mt-2  w-full bg-slate-100"
-                  onChange={handleChange}
+                  onInput={handleChange}
                 />
               </div>
             </div>
@@ -111,7 +117,7 @@ const Signup = () => {
                 name="email"
                 placeholder="Enter your email"
                 className="block p-2 rounded-md mt-2 mb-5 w-full bg-slate-100"
-                onChange={handleChange}
+                onInput={handleChange}
               />
             </div>
             <div>
@@ -132,7 +138,7 @@ const Signup = () => {
                 name="password"
                 placeholder="Enter your password"
                 className="block p-2 rounded-md mt-2 mb-5 w-full bg-slate-100"
-                onChange={handleChange}
+                onInput={handleChange}
               />
             </div>
             <div>
@@ -152,13 +158,14 @@ const Signup = () => {
                 name="confirmPassword"
                 placeholder="Re-enter your password"
                 className="block p-2 rounded-md mt-2  w-full bg-slate-100"
-                onChange={handleChange}
+                onInput={handleChange}
               />
             </div>
 
             <button
               type="submit"
               className="bg-sky-500 px-3 py-2 rounded-md my-8 text-white w-full"
+              disabled={isLoading ? true : false}
             >
               Sign up
             </button>

@@ -1,15 +1,17 @@
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
-const userRouter = require("./routes/login.jsx");
-const User = require("./models/user.jsx");
-const bcrypt = require("bcrypt");
-const pdf = require("./routes/generatePDF.jsx");
-require("dotenv").config({ path: `${__dirname}/.env` });
+const userRouter = require("./routes/login.js");
+const cookieParser = require("cookie-parser");
+const resumeContent = require("./routes/resumeContentRoute.js");
 
+const pdf = require("./routes/generatePDF.js");
+
+require("dotenv").config({ path: ".env" });
 const app = express();
+app.use(cors({ origin: "http://localhost:5173", credentials: true }));
+app.use(cookieParser());
 app.use(express.json());
-app.use(cors());
 
 app.get("/", (req, res) => {
   res.status(200);
@@ -17,6 +19,7 @@ app.get("/", (req, res) => {
 });
 app.use("/api", userRouter);
 app.use("/generate-pdf", pdf);
+app.use("/api/resumeContent", resumeContent);
 
 mongoose
   .connect(process.env.MongoDBURL)

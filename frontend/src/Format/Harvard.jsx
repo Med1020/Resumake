@@ -17,22 +17,24 @@ const Harvard = () => {
   } = useSelector((state) => state.resumeContent);
   return (
     <div className="container">
-      <div className="p-10 ">
+      <div className="p-10">
         {/* basic info */}
         <div className="text-center">
           <h2 className="text-xl font-bold mb-1">{fullName}</h2>
           <div className="mb-2 text-md">{jobTitle}</div>
-          <div className="mb-2 flex justify-center">
+          <div className="mb-2 flex flex-wrap justify-center">
             <div className="mr-2 text-sm flex justify-center items-center">
-              <span className="pr-2">{email && <IoMail />}</span>
+              <span className="pr-2 text-xs">{email && <IoMail />}</span>
               <span>{email}</span>
             </div>
             <span className="mr-2 text-sm flex justify-center items-center">
-              <span className="pr-2">{address && <FaLocationDot />}</span>
+              <span className="pr-2 text-xs">
+                {address && <FaLocationDot />}
+              </span>
               <span>{address}</span>
             </span>
             <span className="mr-2 text-sm  flex justify-center items-center">
-              <span className="pr-2">{phone && <FaSquarePhone />}</span>
+              <span className="pr-2 text-xs">{phone && <FaSquarePhone />}</span>
               <span>{phone}</span>
             </span>
           </div>
@@ -41,9 +43,9 @@ const Harvard = () => {
         {skillList.length > 0 && (
           <div className="mb-4">
             <h3 className="text-md font-semibold ">Skills</h3>
-            <div className="border-b-2 border-black-500 mb-2"></div>
-            {skillList.map(({ title }) => (
-              <ul className="list-disc pl-4">
+            <div className="border-b-2 border-black mb-2"></div>
+            {skillList.map(({ id, title }) => (
+              <ul className="list-disc pl-4" key={id}>
                 <li className="text-sm">{title}</li>
               </ul>
             ))}
@@ -53,7 +55,7 @@ const Harvard = () => {
         {experienceList.length > 0 && (
           <div className="mb-4">
             <h3 className="text-md font-semibold">Experience</h3>
-            <div className="border-b-2 border-black-500 mb-2"></div>
+            <div className="border-b-2 border-black mb-2"></div>
             {experienceList.map(
               ({
                 id,
@@ -104,7 +106,7 @@ const Harvard = () => {
         {educationList.length > 0 && (
           <div className="mb-4">
             <h3 className="text-md font-semibold">Education</h3>
-            <div className="border-b-2 border-black-500 mb-2"></div>
+            <div className="border-b-2 border-black mb-2"></div>
             {educationList.map(
               ({
                 id,
@@ -146,12 +148,12 @@ const Harvard = () => {
         {projectList.length > 0 && (
           <div className="mb-4">
             <h3 className="text-md font-semibold">Project</h3>
-            <div className="border-b-2 border-black-500 mb-2"></div>
+            <div className="border-b-2 border-black mb-2"></div>
             {projectList.map(
               ({ id, title, subTitle, startDate, endDate, description }) => (
                 <div>
                   <div className="flex justify-between">
-                    <div>
+                    <div key={id}>
                       <h4 className="text-md font-semibold">{title}</h4>
                       <h2 className="text-sm">{subTitle}</h2>
                     </div>
@@ -173,7 +175,7 @@ const Harvard = () => {
         {awardList.length > 0 && (
           <div className="mb-4">
             <h3 className="text-md font-semibold ">Awards</h3>
-            <div className="border-b-2 border-black-500 mb-2"></div>
+            <div className="border-b-2 border-black mb-2"></div>
             {awardList.map(({ award, issuer, date, description }) => (
               <div>
                 <div className="flex justify-between">
@@ -194,7 +196,7 @@ const Harvard = () => {
         {courseList.length > 0 && (
           <div className="mb-4">
             <h3 className="text-md font-semibold">Course</h3>
-            <div className="border-b-2 border-black-500 mb-2"></div>
+            <div className="border-b-2 border-black mb-2"></div>
             {courseList.map(
               ({
                 id,

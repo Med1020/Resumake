@@ -5,7 +5,7 @@ import {
   setComponentInEditMode,
   toggleShowComponent,
   setcomponentIsExpanded,
-} from "../State/Slice/displayComponent";
+} from "../Redux/Slice/displayComponent";
 
 const Contentcard = ({ content, handleCloseModal }) => {
   const dispatch = useDispatch();
