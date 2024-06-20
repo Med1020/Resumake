@@ -42,7 +42,7 @@ import {
   sendResumeData,
 } from "../Requests/resumeContentaxios";
 
-export default useCustomHooks = () => {
+const useCustomHooks = () => {
   const dispatch = useDispatch();
   const {
     educationList,
@@ -522,3 +522,5 @@ export default useCustomHooks = () => {
     handleAddUserInfo,
   };
 };
+
+export default useCustomHooks;
