@@ -91,11 +91,14 @@ const CreateResume = () => {
           );
           dispatch(setcertificateList(certificate));
         }
-
-        // award?.map((award) => handleChange(award._id, award, "award"));
-        // project?.map((project) =>
-        //   handleChange(project._id, project, "project")
-        // );
+        if (award && award.length > 0) {
+          dispatch(toggleShowComponent({ section: "award", toShow: true }));
+          dispatch(setawardList(award));
+        }
+        if (project && project.length > 0) {
+          dispatch(toggleShowComponent({ section: "project", toShow: true }));
+          dispatch(setprojectList(project));
+        }
 
         dispatch(updateUserDetails(rest));
       } catch (e) {
@@ -106,7 +109,7 @@ const CreateResume = () => {
   }, []);
 
   return (
-    <div className="flex max-w-full min-h-screen scrollbar-hide relative">
+    <div className="flex max-w-full min-h-screen scrollbar-hide relative overflow-auto">
       <div>
         <SideNavBar />
       </div>
@@ -132,8 +135,8 @@ const CreateResume = () => {
         )}
       </div>
 
-      <div className="mr-5 z-10 w-1/2 fixed right-0">
-        <div className="bg-white shadow-md my-5 min-h-screen">
+      <div className="mr-5 z-10 w-1/2 right-0 ">
+        <div className="bg-white shadow-md my-5 min-h-screen overscroll-contain">
           <ResumeView />
         </div>
       </div>
