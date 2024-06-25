@@ -81,3 +81,14 @@ export const deleteResumeContent = async (elementName, resumeId, id) => {
     throw new Error(`Error ${status}: ${statusText}`);
   }
 };
+
+export const deleteResume = async (resumeId) => {
+  try {
+    const response = await axios.delete("/api/resumeContent/deleteResume", {
+      data: { resumeId },
+    });
+    consoel.log(response);
+  } catch (error) {
+    throw new Error(`Error ${status}: ${statusText}`);
+  }
+};

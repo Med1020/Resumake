@@ -277,7 +277,7 @@ const useCustomHooks = () => {
     //education
     if (elementName === "education") {
       //first element
-      if (educationList.length <= 1 && !previousState) {
+      if (educationList.length < 1 && !previousState) {
         dispatch(toggleShowComponent({ section: "education", toShow: false }));
         dispatch(removeeducationList(newState.id));
         dispatch(setNewContent(""));

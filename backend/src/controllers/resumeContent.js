@@ -112,6 +112,17 @@ const getOneResume = async (req, res) => {
     res.status(500).json({ message: "Server error", error });
   }
 };
+
+const deleteResume = async (req, res) => {
+  try {
+    const { resumeId } = req.body;
+    const deletedResume = await Resume.deleteOne({ _id: resumeId });
+    console.log(deletedResume);
+    res.status(200);
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error });
+  }
+};
 module.exports = {
   updateResumeContent,
   getAllResumes,
@@ -119,4 +130,5 @@ module.exports = {
   getOneResume,
   updateResumeArrays,
   deleteResumeContent,
+  deleteResume,
 };
