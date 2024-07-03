@@ -5,7 +5,7 @@ const userRouter = require("./src/routes/login.js");
 const cookieParser = require("cookie-parser");
 const resumeContent = require("./src/controllers/resumeContent.js");
 
-const pdf = require("./routes/generatePDF.js");
+const pdf = require("./src/routes/generatePDF.js");
 
 require("dotenv").config({ path: ".env" });
 const app = express();
