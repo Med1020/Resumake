@@ -3,7 +3,7 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const userRouter = require("./src/routes/login.js");
 const cookieParser = require("cookie-parser");
-const resumeContent = require("./src/controllers/resumeContent.js");
+const resumeContent = require("./src/routes/resumeContentRoute.js");
 
 const pdf = require("./src/routes/generatePDF.js");
 
@@ -18,7 +18,9 @@ app.get("/", (req, res) => {
   res.end();
 });
 app.use("/api", userRouter);
+
 app.use("/generate-pdf", pdf);
+
 app.use("/api/resumeContent", resumeContent);
 
 mongoose
