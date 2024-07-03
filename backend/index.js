@@ -1,9 +1,9 @@
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
-const userRouter = require("./routes/login.js");
+const userRouter = require("./src/routes/login.js");
 const cookieParser = require("cookie-parser");
-const resumeContent = require("./routes/resumeContentRoute.js");
+const resumeContent = require("./src/controllers/resumeContent.js");
 
 const pdf = require("./routes/generatePDF.js");
 
