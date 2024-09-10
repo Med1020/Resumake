@@ -8,6 +8,7 @@ export const getResumes = async () => {
     const response = await axios.get(
       `${axios.defaults.baseURL}/api/resumeContent/getResumes`
     );
+
     return response;
   } catch (error) {
     console.log(error);
