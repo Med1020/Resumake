@@ -12,7 +12,7 @@ const corsOptions = {
   origin: function (origin, callback) {
     const allowedOrigins = [
       "http://localhost:5173",
-      "https://resumake-seven.vercel.app/",
+      "https://resumake-seven.vercel.app",
     ];
 
     // Check if the origin is in our allowedOrigins array
