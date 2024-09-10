@@ -1,11 +1,10 @@
 import axios from "axios";
 
 axios.defaults.baseURL = import.meta.env.VITE_BACKEND_URL;
-console.log('Axios base URL:', axios.defaults.baseURL);
 axios.defaults.withCredentials = true;
 export const getResumes = async () => {
   try {
-    const response = await axios.get(`/api/resumeContent/getResumes`);
+    const response = await axios.get(`${axios.defaults.baseURL}/api/resumeContent/getResumes`);
     return response;
   } catch (error) {
     console.log(error);
