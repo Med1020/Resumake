@@ -7,9 +7,30 @@ const resumeContent = require("./src/routes/resumeContentRoute.js");
 
 const pdf = require("./src/routes/generatePDF.js");
 
+// CORS configuration
+const corsOptions = {
+  origin: function (origin, callback) {
+    const allowedOrigins = [
+      "http://localhost:5173",
+      "https://resumake-seven.vercel.app/",
+    ];
+
+    // Check if the origin is in our allowedOrigins array
+    // or if it's undefined (for same-origin requests)
+    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+};
+
 require("dotenv").config({ path: ".env" });
 const app = express();
-app.use(cors({ origin: "http://localhost:5173", credentials: true }));
+app.use(cors(corsOptions));
 app.use(cookieParser());
 app.use(express.json());
 
