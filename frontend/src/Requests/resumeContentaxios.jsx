@@ -28,7 +28,7 @@ export const getResumeData = async (resumeId) => {
       `/api/resumeContent/getResume/${resumeId}`
     );
     return response;
-  } catch (e) {
+  } catch (error) {
     const { status, statusText } = error.response;
     throw new Error(`Error ${status}: ${statusText}`);
   }
@@ -42,7 +42,7 @@ export const sendResumeData = async (resumeId, data) => {
       data,
     });
     console.log(response);
-  } catch (e) {
+  } catch (error) {
     const { status, statusText } = error.response;
     throw new Error(`Error ${status}: ${statusText}`);
   }
@@ -87,8 +87,9 @@ export const deleteResume = async (resumeId) => {
     const response = await axios.delete("/api/resumeContent/deleteResume", {
       data: { resumeId },
     });
-    consoel.log(response);
+    console.log(response);
   } catch (error) {
+    const { status, statusText } = error.response;
     throw new Error(`Error ${status}: ${statusText}`);
   }
 };
