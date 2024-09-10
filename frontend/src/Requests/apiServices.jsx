@@ -5,7 +5,7 @@ axios.defaults.withCredentials = true;
 
 export const loginAPI = async ({ email, password }) => {
   try {
-    const response = await axios.post("/api/login", {
+    const response = await axios.post(`${axios.defaults.baseURL}/api/login`, {
       email,
       password,
     });
@@ -19,10 +19,12 @@ export const loginAPI = async ({ email, password }) => {
 
 export const signupAPI = async ({ firstName, lastName, email, password }) => {
   try {
-    const response = await axios.post(
-      `${import.meta.env.VITE_BACKEND_URL}/api/signup`,
-      { firstName, lastName, email, password }
-    );
+    const response = await axios.post(`${axios.defaults.baseURL}/api/signup`, {
+      firstName,
+      lastName,
+      email,
+      password,
+    });
 
     return response;
   } catch (error) {

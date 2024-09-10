@@ -1,10 +1,13 @@
 import axios from "axios";
 
 axios.defaults.baseURL = import.meta.env.VITE_BACKEND_URL;
+
 axios.defaults.withCredentials = true;
 export const getResumes = async () => {
   try {
-    const response = await axios.get(`/api/resumeContent/getResumes`);
+    const response = await axios.get(
+      `${axios.defaults.baseURL}/api/resumeContent/getResumes`
+    );
     return response;
   } catch (error) {
     console.log(error);
@@ -14,7 +17,9 @@ export const getResumes = async () => {
 
 export const createNewResume = async () => {
   try {
-    const response = await axios.post("/api/resumeContent/createNewResume");
+    const response = await axios.post(
+      `${axios.defaults.baseURL}/api/resumeContent/createNewResume`
+    );
     return response;
   } catch (error) {
     const { status, statusText } = error.response;
@@ -25,7 +30,7 @@ export const createNewResume = async () => {
 export const getResumeData = async (resumeId) => {
   try {
     const response = await axios.get(
-      `/api/resumeContent/getResume/${resumeId}`
+      `${axios.defaults.baseURL}/api/resumeContent/getResume/${resumeId}`
     );
     return response;
   } catch (error) {
@@ -37,10 +42,13 @@ export const getResumeData = async (resumeId) => {
 export const sendResumeData = async (resumeId, data) => {
   console.log(data);
   try {
-    const response = await axios.post("/api/resumeContent", {
-      resumeId,
-      data,
-    });
+    const response = await axios.post(
+      `${axios.defaults.baseURL}/api/resumeContent`,
+      {
+        resumeId,
+        data,
+      }
+    );
     console.log(response);
   } catch (error) {
     const { status, statusText } = error.response;
@@ -50,11 +58,14 @@ export const sendResumeData = async (resumeId, data) => {
 
 export const postResumeContent = async (resumeId, elementName, data) => {
   try {
-    const response = await axios.post("/api/resumeContent/postResumeContent", {
-      resumeId,
-      elementName,
-      data,
-    });
+    const response = await axios.post(
+      `${axios.defaults.baseURL}/api/resumeContent/postResumeContent`,
+      {
+        resumeId,
+        elementName,
+        data,
+      }
+    );
     console.log(response);
   } catch (error) {
     const { status, statusText } = error.response;
@@ -65,13 +76,16 @@ export const postResumeContent = async (resumeId, elementName, data) => {
 export const deleteResumeContent = async (elementName, resumeId, id) => {
   // console.log(resumeId, elementName, id);
   try {
-    const response = await axios.delete("/api/resumeContent/remove", {
-      data: {
-        resumeId,
-        id,
-        elementName,
-      },
-    });
+    const response = await axios.delete(
+      `${axios.defaults.baseURL}/api/resumeContent/remove`,
+      {
+        data: {
+          resumeId,
+          id,
+          elementName,
+        },
+      }
+    );
     console.log(response.status);
     if (response.status == 204) {
       return response;
@@ -84,9 +98,12 @@ export const deleteResumeContent = async (elementName, resumeId, id) => {
 
 export const deleteResume = async (resumeId) => {
   try {
-    const response = await axios.delete("/api/resumeContent/deleteResume", {
-      data: { resumeId },
-    });
+    const response = await axios.delete(
+      `${axios.defaults.baseURL}/api/resumeContent/deleteResume`,
+      {
+        data: { resumeId },
+      }
+    );
     console.log(response);
   } catch (error) {
     const { status, statusText } = error.response;
