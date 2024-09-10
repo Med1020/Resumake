@@ -1,6 +1,7 @@
 import axios from "axios";
 
 axios.defaults.baseURL = import.meta.env.VITE_BACKEND_URL;
+console.log('Axios base URL:', axios.defaults.baseURL);
 axios.defaults.withCredentials = true;
 export const getResumes = async () => {
   try {
