@@ -8,7 +8,17 @@ export const getResumes = async () => {
     const response = await axios.get(
       `${axios.defaults.baseURL}/api/resumeContent/getResumes`
     );
-
+    return response;
+  } catch (error) {
+    console.log(error);
+    return error.response.data.message;
+  }
+};
+export const getSingleResume = async (resumeId) => {
+  try {
+    const response = await axios.get(
+      `${axios.defaults.baseURL}/api/resumeContent/getResume/${resumeId}`
+    );
     return response;
   } catch (error) {
     console.log(error);
@@ -75,7 +85,7 @@ export const postResumeContent = async (resumeId, elementName, data) => {
 };
 
 export const deleteResumeContent = async (elementName, resumeId, id) => {
-  // console.log(resumeId, elementName, id);
+  console.log(resumeId, elementName, id);
   try {
     const response = await axios.delete(
       `${axios.defaults.baseURL}/api/resumeContent/remove`,
@@ -87,13 +97,14 @@ export const deleteResumeContent = async (elementName, resumeId, id) => {
         },
       }
     );
-    console.log(response.status);
+    console.log(response);
     if (response.status == 204) {
       return response;
     }
   } catch (error) {
-    const { status, statusText } = error.response;
-    throw new Error(`Error ${status}: ${statusText}`);
+    console.log(error)
+    // const { status, statusText } = error.response;
+    // throw new Error(`Error ${status}: ${statusText}`);
   }
 };
 

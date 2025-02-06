@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import  { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   setComponentInEditMode,
@@ -138,7 +138,7 @@ const Course = () => {
                           country,
                           startDate,
                           endDate,
-                        }) => (
+                        },index) => (
                           <Draggable
                             draggableId={String(id)}
                             index={index}

@@ -59,9 +59,10 @@ const useCustomHooks = () => {
   const handleDelete = (id, elementName) => {
     //education
     deleteResumeContent(elementName, resumeId, id);
+    console.log(id)
     if (elementName === "education") {
       dispatch(removeeducationList(id));
-      if (educationList.length <= 1) {
+      if (educationList.length === 1) {
         dispatch(setNewContent(""));
         dispatch(toggleShowComponent({ section: "education", toShow: false }));
       }
@@ -69,7 +70,7 @@ const useCustomHooks = () => {
     //experience
     else if (elementName === "experience") {
       dispatch(removeexperienceList(id));
-      if (experienceList.length <= 1) {
+      if (experienceList.length === 1) {
         dispatch(setNewContent(""));
         dispatch(toggleShowComponent({ section: "experience", toShow: false }));
       }
@@ -277,7 +278,8 @@ const useCustomHooks = () => {
     //education
     if (elementName === "education") {
       //first element
-      if (educationList.length < 1 && !previousState) {
+
+      if (educationList.length <= 1 && !previousState) {
         dispatch(toggleShowComponent({ section: "education", toShow: false }));
         dispatch(removeeducationList(newState.id));
         dispatch(setNewContent(""));

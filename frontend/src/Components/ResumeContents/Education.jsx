@@ -1,17 +1,18 @@
-import React, { useRef, useState } from "react";
+import { useState } from "react";
 import { IoIosArrowUp, IoIosArrowDown } from "react-icons/io";
 import { MdOutlineDelete } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import {
   setComponentInEditMode,
   setcomponentIsExpanded,
-  toggleShowComponent,
 } from "../../Redux/Slice/displayComponent";
 import CancelSave from "../CancelSaveBtns";
 import { v4 as uuidv4 } from "uuid";
 import useCustomHooks from "../../customHooks/customHook";
 import { RxDragHandleDots2 } from "react-icons/rx";
 import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
+
+
 
 const Education = () => {
   const { componentInEditMode, componentIsExpanded } = useSelector(
@@ -77,7 +78,7 @@ const Education = () => {
   };
 
   const onDelete = (id) => {
-    // console.log(id);
+    console.log(educationList)
     handleDelete(id, "education");
   };
 
@@ -89,7 +90,7 @@ const Education = () => {
   };
 
   const onEdit = (id) => {
-    const [elementToEdit] = educationList.filter((edu) => edu._id === id);
+    const [elementToEdit] = educationList.filter((edu) => edu.id === id);
     setNewEducation(elementToEdit);
     setPreviousState(elementToEdit);
     dispatch(setComponentInEditMode("education"));
@@ -139,7 +140,7 @@ const Education = () => {
                       educationList.map(
                         (
                           {
-                            _id,
+                            id,
                             school,
                             degree,
                             city,
@@ -150,9 +151,9 @@ const Education = () => {
                           index
                         ) => (
                           <Draggable
-                            draggableId={String(_id)}
+                            draggableId={String(id)}
                             index={index}
-                            key={_id}
+                            key={id}
                           >
                             {(draggableProvider) => (
                               <div
@@ -168,7 +169,7 @@ const Education = () => {
                                 </div>
                                 <div
                                   className="w-full"
-                                  onClick={() => onEdit(_id)}
+                                  onClick={() => onEdit(id)}
                                 >
                                   <span className="font-bold">
                                     {school}
@@ -186,7 +187,7 @@ const Education = () => {
                                 <div>
                                   <button
                                     className="bg-white hover:bg-gray-200 rounded-full p-4"
-                                    onClick={() => onDelete(_id)}
+                                    onClick={() => onDelete(id)}
                                   >
                                     <MdOutlineDelete />
                                   </button>

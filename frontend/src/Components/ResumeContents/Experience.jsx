@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   setComponentInEditMode,
@@ -13,7 +13,7 @@ import { RxDragHandleDots2 } from "react-icons/rx";
 import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
 
 const Experience = () => {
-  const { componentInEditMode, newContent, componentIsExpanded } = useSelector(
+  const { componentInEditMode, componentIsExpanded } = useSelector(
     (state) => state.showComponent
   );
   const { experienceList } = useSelector((state) => state.resumeContent);
@@ -82,7 +82,7 @@ const Experience = () => {
     handleChange(newExperience.id, updatedExperience, "experience");
   };
   const onEdit = (id) => {
-    const [elementToEdit] = experienceList.filter((exp) => exp._id === id);
+    const [elementToEdit] = experienceList.filter((exp) => exp.id === id);
     setNewExperience(elementToEdit);
     setPreviousState(elementToEdit);
     dispatch(setComponentInEditMode("experience"));
@@ -133,7 +133,7 @@ const Experience = () => {
                       experienceList.map(
                         (
                           {
-                            _id,
+                            id,
                             employer,
                             jobTitle,
                             city,
@@ -144,9 +144,9 @@ const Experience = () => {
                           index
                         ) => (
                           <Draggable
-                            draggableId={String(_id)}
+                            draggableId={String(id)}
                             index={index}
-                            key={_id}
+                            key={id}
                           >
                             {(draggableProvider) => (
                               <div
@@ -162,7 +162,7 @@ const Experience = () => {
                                 </div>
                                 <div
                                   className="w-full"
-                                  onClick={() => onEdit(_id)}
+                                  onClick={() => onEdit(id)}
                                 >
                                   <span className="font-bold">
                                     {employer}
@@ -182,7 +182,7 @@ const Experience = () => {
                                 <div>
                                   <button
                                     className="bg-white hover:bg-gray-200 rounded-full p-4"
-                                    onClick={() => onDelete(_id)}
+                                    onClick={() => onDelete(id)}
                                   >
                                     <MdOutlineDelete />
                                   </button>

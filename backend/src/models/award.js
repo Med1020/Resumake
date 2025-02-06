@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 
 const awardSchema = new mongoose.Schema({
+  id:{ type: String },
   title: { type: String },
   issuer: { type: String },
   date: Number,

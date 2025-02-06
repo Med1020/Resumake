@@ -1,24 +1,25 @@
-import React, { useEffect, useMemo, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useMemo, useState } from "react";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { IoAddSharp } from "react-icons/io5";
 import { HiDotsVertical } from "react-icons/hi";
 
-import useCustomHooks from "../../customHooks/customHook";
+// import useCustomHooks from "../../customHooks/customHook";
 import {
   deleteResume,
-  getResumeData,
+  // getResumeData,
   getResumes,
 } from "../../Requests/resumeContentaxios";
 import { setResumeId } from "../../Redux/Slice/auth";
-import { updateUserDetails } from "../../Redux/Slice/userInfo";
+
+// import { updateUserDetails } from "../../Redux/Slice/userInfo";
 
 export const YourResumes = ({ openModal }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { handleChange, handleAddUserInfo } = useCustomHooks();
-  const { resumeId } = useSelector((state) => state.authSlice);
+  // const { handleChange, handleAddUserInfo } = useCustomHooks();
+  // const { resumeId } = useSelector((state) => state.authSlice);
   const [resumes, setResumes] = useState([]);
   const [displayResumeMenu, setdisplayResumeMenu] = useState("");
 
@@ -37,7 +38,7 @@ export const YourResumes = ({ openModal }) => {
 
   useMemo(() => {
     r();
-  }, [resumes]);
+  }, []);
 
   const handleOpenResume = async (resumeId) => {
     dispatch(setResumeId(resumeId));
@@ -54,10 +55,10 @@ export const YourResumes = ({ openModal }) => {
   };
 
   return (
-    <div className="flex flex-col m-custom mx-64 my-32">
-      <h1 className="text-2xl font-semibold">Your Resumes</h1>
+    <div className="flex flex-col my-16 mx-10">
+      <header>Your Resumes</header>
       <p className="my-6">Create and download upto 5 resumes for free</p>
-      <div className="flex w-auto overflow-auto">
+      <div className="flex w-auto">
         <div
           className="flex border border-black-500 rounded-md h-64 w-48 mr-4 my-4 justify-center items-center cursor-pointer"
           onClick={openModal}
@@ -66,18 +67,19 @@ export const YourResumes = ({ openModal }) => {
             <IoAddSharp size={48} />
           </div>
         </div>
-        <div className="flex flex-row ">
+        <div className="flex flex-row">
           {resumes &&
             resumes.length > 0 &&
             resumes.map(({ _id }) => (
               <div className="flex m-4" key={_id}>
                 <div
-                  className="border border-black-500 rounded-md p-2 h-64 w-48 cursor-pointer relative group"
+                  className="border border-black-500 h-64 w-48 cursor-pointer relative rounded-sm"
                   onClick={() => handleOpenResume(_id)}
                 >
-                  {/* <img/> */}
-                  <div className="opacity-0 group-hover:opacity-50 absolute bg-white">
-                    Edit
+                  <div className="h-full w-full absolute top-0 opacity-0 hover:opacity-100">
+                    <div className="h-full w-full flex justify-center items-center">
+                      Edit
+                    </div>
                   </div>
                 </div>
                 <button
@@ -86,7 +88,7 @@ export const YourResumes = ({ openModal }) => {
                 >
                   <HiDotsVertical color="grey" />
                 </button>
-                <div className="relative inline-block  ">
+                <div className="relative inline-block">
                   {displayResumeMenu === _id && (
                     <div className="absolute bg-white p-2 border rounded-md cursor-pointer">
                       <ul>

@@ -6,7 +6,7 @@ const componentModal = createSlice({
     displayModal: false,
   },
   reducers: {
-    toggleModal: (state, action) => {
+    toggleModal: (state) => {
       state.displayModal = !state.displayModal;
     },
   },

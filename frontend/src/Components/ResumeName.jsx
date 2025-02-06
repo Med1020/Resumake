@@ -1,22 +1,22 @@
-import React from "react";
-
 import axios from "axios";
+import { useSelector } from "react-redux";
 
 const ResumeName = () => {
+  const resumeId = useSelector((state) => state.authSlice.resumeId);
   const handleDownloadPDF = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:5000/generate-pdf/",
-        // resumeData,
+        `${axios.defaults.baseURL}/generate-pdf/${resumeId}`,
         {
           responseType: "blob",
         }
       );
+
       const blob = new Blob([response.data], { type: "application/pdf" });
       const url = window.URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = url;
-      link.setAttribute("download", "resume.pdf");
+      link.setAttribute("download", `resume-${Date.now()}.pdf`);
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);

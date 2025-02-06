@@ -1,11 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { useSelector } from "react-redux";
 
 const initialState = {
   isLoggedIn: false,
   resumeId: null,
   user: null,
   token: null,
+  resumeTemplate: "",
 };
 
 const authSlice = createSlice({
@@ -27,9 +27,16 @@ const authSlice = createSlice({
       state.user = user;
       state.token = accessToken;
     },
+    setResumeTemplate: (state, action) => {
+      state.resumeTemplate = action.payload;
+    },
   },
 });
 
-export const { setLoginLogout, setResumeId, setCredentials } =
-  authSlice.actions;
+export const {
+  setLoginLogout,
+  setResumeId,
+  setCredentials,
+  setResumeTemplate,
+} = authSlice.actions;
 export default authSlice.reducer;

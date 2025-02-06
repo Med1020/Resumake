@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   setComponentInEditMode,
@@ -64,7 +64,7 @@ const Skill = () => {
     handleChange(newSkill.id, updatedSkill, "skill");
   };
   const onEdit = (id) => {
-    const [elementToEdit] = skillList.filter((skill) => skill._id === id);
+    const [elementToEdit] = skillList.filter((skill) => skill.id === id);
     setNewSkill(elementToEdit);
     setPreviousState(elementToEdit);
     dispatch(setComponentInEditMode("skill"));
@@ -112,11 +112,11 @@ const Skill = () => {
                     {...droppableProvider.droppableProps}
                   >
                     {componentIsExpanded === "skill" &&
-                      skillList.map(({ _id, title }, index) => (
+                      skillList.map(({ id, title }, index) => (
                         <Draggable
-                          draggableId={String(_id)}
+                          draggableId={String(id)}
                           index={index}
-                          key={_id}
+                          key={id}
                         >
                           {(draggableProvider) => (
                             <div
@@ -132,14 +132,14 @@ const Skill = () => {
                               </div>
                               <div
                                 className="w-full"
-                                onClick={() => onEdit(_id)}
+                                onClick={() => onEdit(id)}
                               >
                                 <span className="font-italic">{title}</span>
                               </div>
                               <div>
                                 <button
                                   className="bg-white hover:bg-gray-200 rounded-full p-4"
-                                  onClick={() => onDelete(_id)}
+                                  onClick={() => onDelete(id)}
                                 >
                                   <MdOutlineDelete />
                                 </button>

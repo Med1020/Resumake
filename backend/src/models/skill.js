@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 
 const skillSchema = new mongoose.Schema({
+  id:{ type: String },
   title: { type: String },
 });
 

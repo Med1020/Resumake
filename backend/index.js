@@ -35,8 +35,7 @@ app.use(cookieParser());
 app.use(express.json());
 
 app.get("/", (req, res) => {
-  res.status(200);
-  res.end();
+  res.status(200).send("Success");
 });
 app.use("/api", userRouter);
 

@@ -1,34 +1,24 @@
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import ResumeName from "../Components/ResumeName";
 import UserDetails from "../Components/UserDetails";
 import ResumeView from "../Components/ResumeView";
 import ContentModal from "../Components/ContentModal";
 import Education from "../Components/ResumeContents/Education";
 import Experience from "../Components/ResumeContents/Experience";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import Project from "../Components/ResumeContents/Project";
 import Skill from "../Components/ResumeContents/Skill";
 import Course from "../Components/ResumeContents/Course";
 import Award from "../Components/ResumeContents/Award";
 import SideNavBar from "../Components/SideNavBar";
 import Certificate from "../Components/ResumeContents/Certificate";
-import { getResumeData, getResumes } from "../Requests/resumeContentaxios";
-import { updateUserDetails } from "../Redux/Slice/userInfo";
-import {
-  setcertificateList,
-  setcourseList,
-  seteducationList,
-  setexperienceList,
-  setskillList,
-} from "../Redux/Slice/resumeContent";
-import { toggleShowComponent } from "../Redux/Slice/displayComponent";
+
+import UseResumeData from "../customHooks/UseResumeData";
 
 const CreateResume = () => {
-  const dispatch = useDispatch();
   const [showModal, setShowModal] = useState(false);
   // const [resumes, setResumes] = useState([]);
   const resumeId = useSelector((state) => state.authSlice.resumeId);
-  const educationList = useSelector((state) => state.resumeContent);
   const { componentInEditMode } = useSelector((state) => state.showComponent);
 
   const {
@@ -41,79 +31,17 @@ const CreateResume = () => {
     certificate: { certificate },
   } = useSelector((state) => state.showComponent);
 
-  // console.log(education);
+  UseResumeData(resumeId);
   const handleCloseModal = () => {
     setShowModal(false);
   };
 
-  useEffect(() => {
-    const r = async () => {
-      try {
-        const response = await getResumes();
-        // console.log(response.data);
-        // setResumes(response.data);
-
-        let resumeList = response.data;
-        let [
-          {
-            education,
-            skill,
-            course,
-            certificate,
-            award,
-            project,
-            experience,
-            ...rest
-          },
-        ] = resumeList.filter((resume) => resume._id === resumeId);
-
-        if (education && education.length > 0) {
-          dispatch(toggleShowComponent({ section: "education", toShow: true }));
-          dispatch(seteducationList(education));
-        }
-        if (experience && experience.length > 0) {
-          dispatch(
-            toggleShowComponent({ section: "experience", toShow: true })
-          );
-          dispatch(setexperienceList(experience));
-        }
-        if (skill && skill.length > 0) {
-          dispatch(toggleShowComponent({ section: "skill", toShow: true }));
-          dispatch(setskillList(skill));
-        }
-        if (course && course.length > 0) {
-          dispatch(toggleShowComponent({ section: "course", toShow: true }));
-          dispatch(setcourseList(course));
-        }
-        if (certificate && certificate.length > 0) {
-          dispatch(
-            toggleShowComponent({ section: "certificate", toShow: true })
-          );
-          dispatch(setcertificateList(certificate));
-        }
-        if (award && award.length > 0) {
-          dispatch(toggleShowComponent({ section: "award", toShow: true }));
-          dispatch(setawardList(award));
-        }
-        if (project && project.length > 0) {
-          dispatch(toggleShowComponent({ section: "project", toShow: true }));
-          dispatch(setprojectList(project));
-        }
-
-        dispatch(updateUserDetails(rest));
-      } catch (e) {
-        console.log(e);
-      }
-    };
-    r();
-  }, []);
-
   return (
-    <div className="flex max-w-full min-h-screen scrollbar-hide relative overflow-auto">
+    <div className="flex max-w-full bg-gray-100 h-screen relative overflow-hidden">
       <div>
         <SideNavBar />
       </div>
-      <div className="mx-5 w-1/3">
+      <div className="mx-5 w-[40%] h-screen overflow-auto scrollbar-hidden no-scrollbar">
         <ResumeName />
         <UserDetails />
 
@@ -127,7 +55,7 @@ const CreateResume = () => {
 
         {!componentInEditMode && (
           <button
-            className="my-2 p-2 border  bg-pink-500 text-white rounded-lg"
+            className="my-2 p-2 border bg-pink-500 text-white rounded-lg "
             onClick={() => setShowModal(true)}
           >
             Add Content
@@ -135,15 +63,19 @@ const CreateResume = () => {
         )}
       </div>
 
-      <div className="mr-5 z-10 w-1/2 right-0 ">
-        <div className="bg-white shadow-md my-5 min-h-screen overscroll-contain">
+      <div className="mr-5 mb-5 w-[40%] h-screen box-border absolute right-0 overflow-auto no-scrollbar">
+        <div className="bg-white shadow-md my-5 h-full">
           <ResumeView />
         </div>
       </div>
 
       {showModal && <ContentModal handleCloseModal={handleCloseModal} />}
+ 
+        
+  
     </div>
   );
 };
 
 export default CreateResume;
+

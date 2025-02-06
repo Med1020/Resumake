@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { signupAPI } from "../Requests/apiServices";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
@@ -13,6 +13,7 @@ const Signup = () => {
     confirmPassword: "",
   });
   const [isLoading, setIsLoading] = useState(false);
+
   const navigate = useNavigate();
   const {
     register,
@@ -27,7 +28,7 @@ const Signup = () => {
     errors[name] && clearErrors(name);
   };
 
-  const onSubmit = async (data) => {
+  const onSubmit = async () => {
     setIsLoading(true);
     try {
       const { response } = await signupAPI({

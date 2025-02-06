@@ -3,7 +3,7 @@ import { IoMail } from "react-icons/io5";
 import { FaLocationDot } from "react-icons/fa6";
 import { FaSquarePhone } from "react-icons/fa6";
 
-const Harvard = () => {
+const Harvard_2 = () => {
   const { fullName, email, jobTitle, phone, address } = useSelector(
     (state) => state.userDetails
   );
@@ -16,7 +16,7 @@ const Harvard = () => {
     courseList,
   } = useSelector((state) => state.resumeContent);
   return (
-    <div className="container roboto-slab-harvard">
+    <div className="container cormorant-garamond-regular">
       <div className="p-10">
         {/* basic info */}
         <div className="text-center">
@@ -233,4 +233,4 @@ const Harvard = () => {
   );
 };
 
-export default Harvard;
+export default Harvard_2;

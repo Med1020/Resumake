@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { loginAPI } from "../Requests/apiServices";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { setLoginLogout } from "../Redux/Slice/auth";
+import { IoIosEye } from "react-icons/io";
+import { IoIosEyeOff } from "react-icons/io";
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -16,6 +18,7 @@ const Login = () => {
   } = useForm();
   const [credentials, setCredentials] = useState({ email: "", password: "" });
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -24,7 +27,7 @@ const Login = () => {
     errors[name] && clearErrors(name);
   };
 
-  const onSubmit = async (data) => {
+  const onSubmit = async () => {
     setIsLoading(true);
 
     try {
@@ -35,6 +38,7 @@ const Login = () => {
       if (response.status === 200) {
         toast.success(response.data.message);
         dispatch(setLoginLogout(true));
+
         navigate(-1);
       } else {
         if (response === "Incorrect email") {
@@ -56,7 +60,7 @@ const Login = () => {
   return (
     <div>
       <div className="flex justify-center items-center h-screen">
-        <div className="w-1/4 bg-white p-4 rounded-lg">
+        <div className="w-1/4  bg-slate-100 p-4 rounded-lg">
           <header className="text-xl font-bold pb-5">Login</header>
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="mb-2">
@@ -72,7 +76,7 @@ const Login = () => {
                 aria-invalid={errors.email ? "true" : "false"}
                 placeholder="Enter your email"
                 id="email"
-                className="block p-2 rounded-md mt-2  w-full bg-slate-100"
+                className="block p-2 rounded-md mt-2  w-full"
                 onInput={handleChange}
               />
               {errors.email && (
@@ -81,18 +85,27 @@ const Login = () => {
             </div>
             <div>
               <label className="pb-2">Password</label>
-              <input
-                {...register("password", {
-                  required: true,
-                  maxLength: 20,
-                })}
-                aria-invalid={errors.password ? "true" : "false"}
-                type="password"
-                id="password"
-                placeholder="Enter your password"
-                className="block p-2 rounded-md mt-2 w-full bg-slate-100"
-                onInput={handleChange}
-              />
+              <div className="flex relative w-full">
+                <input
+                  {...register("password", {
+                    required: true,
+                    maxLength: 20,
+                  })}
+                  aria-invalid={errors.password ? "true" : "false"}
+                  type={showPassword ? "text" : "password"}
+                  id="password"
+                  placeholder="Enter your password"
+                  className="block p-2 rounded-md mt-2 w-full"
+                  onInput={handleChange}
+                />
+                <button
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-5 top-5 "
+                  type="button"
+                >
+                  {showPassword ? <IoIosEye /> : <IoIosEyeOff />}
+                </button>
+              </div>
               {errors.password?.type === "required" && (
                 <p className="font-xs text-red-500">Password is required</p>
               )}

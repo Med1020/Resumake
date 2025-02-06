@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 
 const experienceSchema = new mongoose.Schema({
+  id:{ type: String },
   employer: { type: String },
   jobTitle: { type: String },
   city: { type: String },
