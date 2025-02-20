@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   setComponentInEditMode,
@@ -18,8 +18,13 @@ const Award = () => {
   );
   const { awardList } = useSelector((state) => state.resumeContent);
 
-  const { handleDelete, handleChange, handleCancel, handleSave } =
-    useCustomHooks();
+  const {
+    handleDelete,
+    handleChange,
+    handleCancel,
+    handleSave,
+    handleDragEnd,
+  } = useCustomHooks();
 
   const dispatch = useDispatch();
 

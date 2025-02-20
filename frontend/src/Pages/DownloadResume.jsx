@@ -1,13 +1,19 @@
-import React from "react";
+import { useDispatch } from "react-redux";
+import { useParams } from "react-router-dom";
+import { setResumeId, setResumeTemplate } from "../Redux/Slice/auth";
 import ResumeView from "../Components/ResumeView";
-import { getResumeData } from "../Requests/resumeContentaxios";
-import { useSelector } from "react-redux";
-import CreateResume from "./CreateResume";
+import UseResumeData from "../customHooks/UseResumeData";
 
 const DownloadResume = () => {
+  let params = useParams();
+  const resumeId = params.resumeId;
+  const dispatch = useDispatch();
+  dispatch(setResumeId(resumeId));
+  dispatch(setResumeTemplate("Harvard"));
+  UseResumeData(resumeId);
   return (
     <div>
-      <CreateResume />
+      <ResumeView />
     </div>
   );
 };

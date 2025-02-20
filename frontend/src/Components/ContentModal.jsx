@@ -1,4 +1,3 @@
-import React from "react";
 import { content } from "../utils/utils";
 import Contentcard from "./Contentcard";
 
@@ -18,8 +17,12 @@ const ContentModal = ({ handleCloseModal }) => {
             </button>
           </div>
           <div className="flex">
-            {content.map((item) => (
-              <Contentcard content={item} handleCloseModal={handleCloseModal} />
+            {content.map((item, index) => (
+              <Contentcard
+                content={item}
+                key={index}
+                handleCloseModal={handleCloseModal}
+              />
             ))}
           </div>
         </div>

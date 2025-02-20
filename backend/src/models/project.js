@@ -6,6 +6,7 @@ const projectSchema = new mongoose.Schema({
     ref: "Resume",
     required: true,
   },
+  id:{ type: String },
   title: { type: String },
   subTitle: { type: String },
   startDate: { type: Number },

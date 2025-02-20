@@ -17,6 +17,15 @@ export const loginAPI = async ({ email, password }) => {
   }
 };
 
+export const logoutAPI = async () => {
+  try {
+    const response = await axios.post(`${axios.defaults.baseURL}/api/logout`);
+    return response;
+  } catch (error) {
+    return error.response.data.message;
+  }
+};
+
 export const signupAPI = async ({ firstName, lastName, email, password }) => {
   try {
     const response = await axios.post(`${axios.defaults.baseURL}/api/signup`, {
@@ -31,3 +40,4 @@ export const signupAPI = async ({ firstName, lastName, email, password }) => {
     return error;
   }
 };
+

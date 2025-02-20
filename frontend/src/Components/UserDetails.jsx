@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { cancelUpdate, updateUserDetails } from "../Redux/Slice/userInfo";
 import { MdOutlineEmail } from "react-icons/md";
 import { FaPhoneAlt } from "react-icons/fa";
 import { IoLocationOutline } from "react-icons/io5";
 import { sendResumeData } from "../Requests/resumeContentaxios";
+import InputBox from "./UI/InputBox";
 
 const UserDetails = () => {
   const dispatch = useDispatch();
@@ -91,24 +92,22 @@ const UserDetails = () => {
         <div>
           <div className="p-5 bg-white border rounded-md">
             <p className="text-2xl font-bold mb-5">Edit personal details</p>
-            <label>Full Name</label>
-            <input
-              placeholder="Enter your first and last name"
-              className="block border rounded-md border-gray-300 w-full p-2 mb-4"
-              onChange={handleChange}
+            <InputBox
+              label="Full Name"
               value={fullName}
-              name="fullName"
-            ></input>
-            <label>
-              Job Title
-              <input
-                placeholder="Enter job title"
-                className="block border rounded-md border-gray-300 w-full p-2 mb-4"
-                onChange={handleChange}
-                value={jobTitle}
-                name="jobTitle"
-              ></input>
-            </label>
+              name={"fullName"}
+              placeholder="Enter your first and last name"
+              handleChange={handleChange}
+            />
+            <InputBox
+              label="   Job Title"
+              value={jobTitle}
+              name={"jobTitle"}
+              placeholder="Enter job title"
+              handleChange={handleChange}
+            />
+            
+    
             <div className="flex my-2">
               <div className="mr-5 w-1/2">
                 <label className="block">Email</label>
@@ -144,13 +143,13 @@ const UserDetails = () => {
           </div>
           <div>
             <button
-              className="my-2 p-2 w-24 border border-slate-300 rounded-md bg-grey-300 text-grey font-bold rounded-lg"
+              className="my-2 p-2 w-24 border border-slate-300  bg-grey-300 text-grey font-bold rounded-lg"
               onClick={handleCancelEdit}
             >
               Cancel
             </button>
             <button
-              className="ml-3 p-2 w-24 border rounded-md bg-pink-500 text-white font-bold rounded-lg"
+              className="ml-3 p-2 w-24 border  bg-pink-500 text-white font-bold rounded-lg"
               onClick={handleSave}
             >
               Save

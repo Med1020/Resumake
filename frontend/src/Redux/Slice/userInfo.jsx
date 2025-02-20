@@ -19,7 +19,7 @@ const userInfo = createSlice({
       state.phone = phone;
       state.address = address;
     },
-    cancelUpdate: (state, action) => {
+    cancelUpdate: (state) => {
       return state;
     },
   },

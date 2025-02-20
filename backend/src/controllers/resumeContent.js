@@ -6,7 +6,6 @@ const modelMap = require("../models/modelMap.js");
 
 const updateResumeContent = async (req, res) => {
   const { resumeId, data } = req.body;
-  console.log(resumeId, data);
 
   const resume = await Resume.findOneAndUpdate({ _id: resumeId }, data, {
     returnOriginal: false,
@@ -14,13 +13,13 @@ const updateResumeContent = async (req, res) => {
   if (!resume) {
     console.log("Resume not found");
   }
-  console.log(resume);
+  // console.log(resume);
   res.status(200).send("added content");
 };
 
 const updateResumeArrays = async (req, res) => {
   let { resumeId, elementName, data } = req.body;
-  let objectId = data._id || data.id;
+  let objectId = data.id;
 
   // const filter = {
   //   _id: resumeId,
@@ -32,11 +31,11 @@ const updateResumeArrays = async (req, res) => {
   });
 
   let existingEntryIndex = resume[elementName].findIndex(
-    (entry) => entry._id.valueOf() === objectId
+    (entry) => entry.id.valueOf() === objectId
   );
 
   if (existingEntryIndex > -1) {
-    const { _id, ...updateData } = data;
+    const { _id, id, ...updateData } = data;
     resume[elementName][existingEntryIndex] = {
       ...resume[elementName][existingEntryIndex]._doc,
       ...updateData,
@@ -53,10 +52,10 @@ const deleteResumeContent = async (req, res) => {
   const { resumeId, elementName, id } = req.body;
   const query = { _id: resumeId };
 
+  console.log(elementName, id);
   // Construct the update object using $pull
-  const update = { $pull: { [`${elementName}`]: { _id: id } } };
+  const update = { $pull: { [`${elementName}`]: { id: id } } };
   const deletedContent = await Resume.updateOne(query, update);
-  console.log(deletedContent);
   res.status(204);
 };
 
@@ -64,7 +63,7 @@ const getAllResumes = async (req, res) => {
   const userId = req.userId;
   // const user = await User.findById(userId);
   const resume = await Resume.find({ userId: userId });
-  // console.log(resume);
+
   if (!resume) {
     res.status(404).send("Resume not found");
   }
@@ -76,21 +75,21 @@ const createNewResume = async (req, res) => {
   try {
     const userId = req.userId;
     const user = await User.findById(userId);
-
+    // console.log(user.resumes);
     if (!user) {
-      res.status(404).send("User not found");
+      return res.status(404).send("User not found");
     }
     if (user.resumes.length > 5) {
-      res.status(500).send("Cannot create more than 5 resumes sorri");
+      return res.status(500).send("Cannot create more than 5 resumes sorri");
     }
     const newResume = await new Resume({ userId }).save();
     user.resumes.push(newResume);
     await user.save();
-    res
+    return res
       .status(201)
       .json({ message: "Resume created", resumeId: newResume._id });
   } catch (error) {
-    res.status(500).json({ message: "Server error", error });
+    return res.status(500).json({ message: "Server error", error });
   }
 };
 
@@ -98,7 +97,7 @@ const getOneResume = async (req, res) => {
   try {
     const userId = req.userId;
     const resumeId = req.params.resumeId;
-    console.log(resumeId);
+
     const user = await User.findById(userId);
 
     if (!user) {
@@ -106,19 +105,20 @@ const getOneResume = async (req, res) => {
     }
 
     const resume = await Resume.findById(resumeId);
-    console.log(resume);
-    res.status(200).json({ message: "Returning resume", resume });
+    res.status(200).json({ resume });
   } catch (error) {
     res.status(500).json({ message: "Server error", error });
   }
 };
 
 const deleteResume = async (req, res) => {
+  const userId = req.userId;
   try {
     const { resumeId } = req.body;
     const deletedResume = await Resume.deleteOne({ _id: resumeId });
-    console.log(deletedResume);
-    res.status(200);
+    await User.updateOne({ _id: userId }, { $pull: { resumes: resumeId } });
+    // console.log(deletedResume);
+    res.status(200).json({ message: "Resume deleted successfully" });
   } catch (error) {
     res.status(500).json({ message: "Server error", error });
   }

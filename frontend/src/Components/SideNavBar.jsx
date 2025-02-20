@@ -1,6 +1,5 @@
-import React from "react";
 import logo from "../assets/image.png";
-import format from "../assets/copy.png";
+
 import { Link } from "react-router-dom";
 
 const SideNavBar = () => {

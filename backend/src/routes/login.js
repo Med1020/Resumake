@@ -4,6 +4,11 @@ const router = express.Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/user.js");
+const {
+  refreshTokenHandler,
+  generateAccessToken,
+  generateRefreshToken,
+} = require("../controllers/authcontroller.js");
 
 // Route for user login
 router.post("/login", async (req, res) => {
@@ -17,6 +22,11 @@ router.post("/login", async (req, res) => {
     if (!isPasswordValid) {
       return res.status(400).json({ message: "Incorrect password" });
     }
+
+    // const accessToken = generateAccessToken(user);
+    // const refreshToken = generateRefreshToken(user);
+
+    // res.cookie("token", refreshToken, {
     const token = jwt.sign({ userId: user._id }, "secretKey", {
       expiresIn: "24h",
     });
@@ -28,11 +38,22 @@ router.post("/login", async (req, res) => {
       // domain: "localhost",
     });
 
+    // return res.json({ accessToken });
     return res.status(200).json({ message: "Login successful" });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 });
+
+// Refresh Token Route
+router.post("/refresh", refreshTokenHandler);
+
+// Logout Route (Clear cookies)
+router.post("/logout", (req, res) => {
+  res.clearCookie("refreshToken");
+  res.json({ message: "Logged out" });
+});
+
 router.post("/signup", async (req, res) => {
   try {
     const { firstName, lastName, email, password } = req.body;
