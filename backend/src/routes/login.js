@@ -8,7 +8,7 @@ const {
   refreshTokenHandler,
   generateAccessToken,
   generateRefreshToken,
-} = require("../controllers/authcontroller.js");
+} = require("../controllers/authController.js");
 
 // Route for user login
 router.post("/login", async (req, res) => {
